@@ -1,0 +1,14 @@
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.csproj.AssemblyReference.cache
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.AssemblyInfoInputs.cache
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.AssemblyInfo.cs
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.csproj.CoreCompileInputs.cache
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\bin\Debug\net8.0\Sistema de reserva Futbol Ya.deps.json
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\bin\Debug\net8.0\Sistema de reserva Futbol Ya.runtimeconfig.json
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\bin\Debug\net8.0\Sistema de reserva Futbol Ya.dll
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\bin\Debug\net8.0\Sistema de reserva Futbol Ya.pdb
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.dll
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\refint\Sistema de reserva Futbol Ya.dll
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.pdb
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\Sistema de reserva Futbol Ya.genruntimeconfig.cache
+C:\Users\leona\OneDrive\Documentos\Ejercicios de Programacion\Sistema de reserva Futbol Ya\Sistema de reserva Futbol Ya\obj\Debug\net8.0\ref\Sistema de reserva Futbol Ya.dll
