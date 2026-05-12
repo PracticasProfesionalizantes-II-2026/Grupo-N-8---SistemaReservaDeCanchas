@@ -10,3 +10,4 @@
 
 2026:
 [Documentación del proyectoV2](https://docs.google.com/document/d/14PbJCD9e18EdYHACEBFLRVqnlWQvJPIPNy4jGATCMIM/edit?usp=sharing)
+[Apis - Gestion de Reserva Futbol YA](https://docs.google.com/document/d/1rLEIVHViZpNzWSVKFAQC3gooSQ-DkB1DiTJg6w0mgtI/edit?usp=sharing)
