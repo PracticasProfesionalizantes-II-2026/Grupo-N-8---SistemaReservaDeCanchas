@@ -10,7 +10,7 @@ public class Cancha
     public string Descripcion { get; set; }
 
     // Valores posibles: "Disponible" o "En Mantenimiento"
-    public string Estado { get; set; }
+    public bool Estado { get; set; }
 
     // Navegación
     public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
