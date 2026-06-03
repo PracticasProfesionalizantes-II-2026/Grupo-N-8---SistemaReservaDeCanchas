@@ -2,23 +2,22 @@ using Microsoft.EntityFrameworkCore;
 using FutbolyaAPIS.Datos;
 using FutbolyaAPIS.Entidades;
 
-
 namespace FutbolyaAPIS.Repositorios;
 
 public interface IUsuarioRepository
 {
-    Task<IEnumerable<Usuario>>ObtenerTodos();
-    Task<Usuario>ObtenerPorId(int id);
+    Task<IEnumerable<Usuario>> ObtenerTodos();
+    Task<Usuario?> ObtenerPorId(int id);
     Task Agregar(Usuario usuario);
     Task Actualizar(Usuario usuario);
-    Task Eliminar(int id);
+    Task Eliminar(Usuario usuario);
 }
 
-public class UsuarioRespository : IUsuarioRepository
+public class UsuarioRepository : IUsuarioRepository
 {
     private readonly AppDbContext _db;
 
-    public UsuarioRespository(AppDbContext db)
+    public UsuarioRepository(AppDbContext db)
     {
         _db = db;
     }
@@ -28,7 +27,7 @@ public class UsuarioRespository : IUsuarioRepository
         return await _db.Usuarios.ToListAsync();
     }
 
-    public async Task<Usuario>ObtenerPorId(int id)
+    public async Task<Usuario?> ObtenerPorId(int id)
     {
         return await _db.Usuarios.FindAsync(id);
     }
@@ -45,14 +44,9 @@ public class UsuarioRespository : IUsuarioRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task Eliminar(int id)
+    public async Task Eliminar(Usuario usuario)
     {
-        var usuario = await _db.Usuarios.FindAsync(id);
-
-        if(usuario != null)
-        {
-            _db.Usuarios.Remove(usuario);
-            await _db.SaveChangesAsync();
-        }
+        _db.Usuarios.Remove(usuario);
+        await _db.SaveChangesAsync();
     }
 }

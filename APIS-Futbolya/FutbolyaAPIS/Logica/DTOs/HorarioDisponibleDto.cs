@@ -1,11 +1,14 @@
+namespace FutbolyaAPIS.Logica.DTOs;
 
+public record HorarioDisponibleDto(
+    int Cod_Horario,
+    TimeSpan HoraInicio,
+    TimeSpan HoraFin,
+    bool Activo
+);
 
-namespace FutbolyaAPIS.Logica.Dtos;
-
-
-public record HorarioDisponibleDto(int id, TimeSpan HoraIncio, TimeSpan HoraFin, bool Activo);
-
-public record HorarioDisponibleCreateDto(TimeSpan HoraIncio, TimeSpan HoraFin);
-
-
-
+public record HorarioDisponibleCreateDto(
+    TimeSpan HoraInicio,
+    TimeSpan HoraFin,
+    bool Activo
+);

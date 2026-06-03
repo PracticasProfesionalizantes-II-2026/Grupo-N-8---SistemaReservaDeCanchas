@@ -2,37 +2,46 @@ using Microsoft.EntityFrameworkCore;
 using FutbolyaAPIS.Datos;
 using FutbolyaAPIS.Entidades;
 
-
 namespace FutbolyaAPIS.Repositorios;
-
 
 public interface IReservaRepository
 {
-    Task<IEnumerable<Reserva>>ObtenerTodo();
-    Task<Reserva>ObtenerPorId(int id);
+    Task<IEnumerable<Reserva>> ObtenerTodos();
+    Task<Reserva?> ObtenerPorId(int id);
     Task Agregar(Reserva reserva);
     Task Actualizar(Reserva reserva);
-    Task Eliminar(int id);
+    Task Eliminar(Reserva reserva);
 }
 
-
-public class ReservaRespository : IReservaRepository
+public class ReservaRepository : IReservaRepository
 {
     private readonly AppDbContext _db;
 
-    public ReservaRespository(AppDbContext db)
+    public ReservaRepository(AppDbContext db)
     {
         _db = db;
     }
 
-    public async Task<IEnumerable<Reserva>> ObtenerTodo()
+    public async Task<IEnumerable<Reserva>> ObtenerTodos()
     {
-        return await _db.Reservas.ToListAsync();
+        return await _db.Reservas
+                        .Include(r => r.Usuario)
+                        .Include(r => r.Cancha)
+                        .Include(r => r.HorarioDisponible)
+                        .Include(r => r.ReservaMateriales)
+                            .ThenInclude(rm => rm.Material_Deportivo)
+                        .ToListAsync();
     }
 
-    public async Task<Reserva>ObtenerPorId(int id)
+    public async Task<Reserva?> ObtenerPorId(int id)
     {
-        return await _db.Reservas.FindAsync(id);
+        return await _db.Reservas
+                        .Include(r => r.Usuario)
+                        .Include(r => r.Cancha)
+                        .Include(r => r.HorarioDisponible)
+                        .Include(r => r.ReservaMateriales)
+                            .ThenInclude(rm => rm.Material_Deportivo)
+                        .FirstOrDefaultAsync(r => r.Cod_Reserva == id);
     }
 
     public async Task Agregar(Reserva reserva)
@@ -47,14 +56,9 @@ public class ReservaRespository : IReservaRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task Eliminar(int id)
+    public async Task Eliminar(Reserva reserva)
     {
-        var reserva = await _db.Reservas.FindAsync(id);
-
-        if(reserva != null)
-        {
-            _db.Reservas.Remove(reserva);
-            await _db.SaveChangesAsync();
-        }
+        _db.Reservas.Remove(reserva);
+        await _db.SaveChangesAsync();
     }
 }

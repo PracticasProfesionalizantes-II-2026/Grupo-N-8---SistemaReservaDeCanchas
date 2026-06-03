@@ -4,14 +4,13 @@ using FutbolyaAPIS.Entidades;
 
 namespace FutbolyaAPIS.Repositorios;
 
-public interface ICanchaRepository 
+public interface ICanchaRepository
 {
     Task<IEnumerable<Cancha>> ObtenerTodos();
-    Task<Cancha> ObtenerPorId(int id);
+    Task<Cancha?> ObtenerPorId(int id);
     Task Agregar(Cancha cancha);
     Task Actualizar(Cancha cancha);
-    Task Eliminar(int id);
-
+    Task Eliminar(Cancha cancha);
 }
 
 public class CanchaRepository : ICanchaRepository
@@ -27,27 +26,27 @@ public class CanchaRepository : ICanchaRepository
     {
         return await _db.Canchas.ToListAsync();
     }
-    public async Task<Cancha> ObtenerPorId(int id)
+
+    public async Task<Cancha?> ObtenerPorId(int id)
     {
         return await _db.Canchas.FindAsync(id);
     }
+
     public async Task Agregar(Cancha cancha)
     {
         _db.Canchas.Add(cancha);
         await _db.SaveChangesAsync();
     }
+
     public async Task Actualizar(Cancha cancha)
     {
         _db.Canchas.Update(cancha);
         await _db.SaveChangesAsync();
     }
-    public async Task Eliminar(int id)
+
+    public async Task Eliminar(Cancha cancha)
     {
-        var cancha = await _db.Canchas.FindAsync(id);
-        if (cancha != null)
-        {
-            _db.Canchas.Remove(cancha);
-            await _db.SaveChangesAsync();
-        }
+        _db.Canchas.Remove(cancha);
+        await _db.SaveChangesAsync();
     }
 }

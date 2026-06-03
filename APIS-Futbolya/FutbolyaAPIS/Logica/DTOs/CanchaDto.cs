@@ -1,13 +1,14 @@
-
-namespace FutbolyaAPIS.Logica.Dtos;
+namespace FutbolyaAPIS.Logica.DTOs;
 
 public record CanchaDto(
-    int id, 
-    string nombre, 
-    string Descripcion, 
-    bool estado
-    
+    int Cod_Cancha,
+    string Nombre,
+    string Descripcion,
+    bool Estado
 );
 
-
-public record CachaCreateDto(string Descripcion);
+public record CanchaCreateDto(
+    string Nombre,
+    string Descripcion,
+    bool Estado
+);

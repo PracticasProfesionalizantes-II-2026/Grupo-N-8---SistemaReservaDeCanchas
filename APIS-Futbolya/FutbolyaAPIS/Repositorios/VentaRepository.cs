@@ -7,15 +7,16 @@ namespace FutbolyaAPIS.Repositorios;
 public interface IVentaRepository
 {
     Task<IEnumerable<Venta>> ObtenerTodos();
-    Task<Venta>ObtenerPorID(int id);
+    Task<Venta?> ObtenerPorId(int id);
     Task Agregar(Venta venta);
     Task Actualizar(Venta venta);
-    Task Eliminar(int id);
+    Task Eliminar(Venta venta);
 }
 
 public class VentaRepository : IVentaRepository
 {
     private readonly AppDbContext _db;
+
     public VentaRepository(AppDbContext db)
     {
         _db = db;
@@ -23,12 +24,19 @@ public class VentaRepository : IVentaRepository
 
     public async Task<IEnumerable<Venta>> ObtenerTodos()
     {
-        return await _db.Ventas.ToListAsync();
+        return await _db.Ventas
+                        .Include(v => v.Usuario)
+                        .Include(v => v.VentasDetalladas)
+                        .ToListAsync();
     }
 
-    public async Task<Venta>ObtenerPorID(int id)
+    public async Task<Venta?> ObtenerPorId(int id)
     {
-        return await _db.Ventas.FindAsync(id);
+        return await _db.Ventas
+                        .Include(v => v.Usuario)
+                        .Include(v => v.VentasDetalladas)
+                            .ThenInclude(vd => vd.Producto)
+                        .FirstOrDefaultAsync(v => v.Cod_Venta == id);
     }
 
     public async Task Agregar(Venta venta)
@@ -43,15 +51,9 @@ public class VentaRepository : IVentaRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task Eliminar(int id)
+    public async Task Eliminar(Venta venta)
     {
-        var venta = await _db.Ventas.FindAsync(id);
-
-        if(venta != null)
-        {
-            _db.Ventas.Remove(venta);
-            await _db.SaveChangesAsync();
-        }
+        _db.Ventas.Remove(venta);
+        await _db.SaveChangesAsync();
     }
-
 }

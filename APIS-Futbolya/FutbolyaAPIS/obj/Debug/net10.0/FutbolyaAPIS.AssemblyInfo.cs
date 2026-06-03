@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FutbolyaAPIS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f1183917eb3f2090f8cef74508504771f16d5d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbff22e2ff50d9a6f20a75a7d41d4679c1e90e31")]
 [assembly: System.Reflection.AssemblyProductAttribute("FutbolyaAPIS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FutbolyaAPIS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

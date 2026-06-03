@@ -4,19 +4,19 @@ using FutbolyaAPIS.Entidades;
 
 namespace FutbolyaAPIS.Repositorios;
 
-public interface IProductoRespository
+public interface IProductoRepository
 {
     Task<IEnumerable<Producto>> ObtenerTodos();
-    Task<Producto>ObtenerPorID(int id);
+    Task<Producto?> ObtenerPorId(int id);
     Task Agregar(Producto producto);
     Task Actualizar(Producto producto);
-    Task Eliminar(int id);
+    Task Eliminar(Producto producto);
 }
 
-
-public class ProductoRepository : IProductoRespository
+public class ProductoRepository : IProductoRepository
 {
     private readonly AppDbContext _db;
+
     public ProductoRepository(AppDbContext db)
     {
         _db = db;
@@ -27,7 +27,7 @@ public class ProductoRepository : IProductoRespository
         return await _db.Productos.ToListAsync();
     }
 
-    public async Task<Producto>ObtenerPorID(int id)
+    public async Task<Producto?> ObtenerPorId(int id)
     {
         return await _db.Productos.FindAsync(id);
     }
@@ -44,20 +44,9 @@ public class ProductoRepository : IProductoRespository
         await _db.SaveChangesAsync();
     }
 
-    public async Task Eliminar(int id)
+    public async Task Eliminar(Producto producto)
     {
-        var producto = await _db.Productos.FindAsync(id);
-
-        if(producto != null)
-        {
-            _db.Productos.Remove(producto);
-            await _db.SaveChangesAsync();
-        }
+        _db.Productos.Remove(producto);
+        await _db.SaveChangesAsync();
     }
-
 }
-
-
-
-
-

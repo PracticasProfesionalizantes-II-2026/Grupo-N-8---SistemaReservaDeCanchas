@@ -11,7 +11,7 @@ public class Usuario
     public string Direccion { get; set; }
     public string Correo { get; set; }
     public string Contraseña { get; set; }
-    public string Rol { get; set; } // Valores posibles: "Operador" o "Administrador"
+    public bool Rol { get; set; } // Valores posibles: "Operador" o "Administrador"
     public bool Cambiar_Contraseña { get; set; }
 
     

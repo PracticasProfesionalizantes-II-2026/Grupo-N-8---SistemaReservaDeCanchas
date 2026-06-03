@@ -4,20 +4,20 @@ using FutbolyaAPIS.Entidades;
 
 namespace FutbolyaAPIS.Repositorios;
 
-public interface IMaterial_DeportivoRepository
+public interface IMaterialDeportivoRepository
 {
     Task<IEnumerable<Material_Deportivo>> ObtenerTodos();
-    Task<Material_Deportivo> ObtenerPorId(int id);
-    Task Agregar(Material_Deportivo materialDeportivo);
-    Task Actualizar(Material_Deportivo materialDeportivo);
-    Task Eliminar(int id);
+    Task<Material_Deportivo?> ObtenerPorId(int id);
+    Task Agregar(Material_Deportivo material);
+    Task Actualizar(Material_Deportivo material);
+    Task Eliminar(Material_Deportivo material);
 }
 
-public class Material_DeportivoRepository : IMaterial_DeportivoRepository
+public class MaterialDeportivoRepository : IMaterialDeportivoRepository
 {
     private readonly AppDbContext _db;
 
-    public Material_DeportivoRepository(AppDbContext db)
+    public MaterialDeportivoRepository(AppDbContext db)
     {
         _db = db;
     }
@@ -26,27 +26,27 @@ public class Material_DeportivoRepository : IMaterial_DeportivoRepository
     {
         return await _db.MaterialesDeportivos.ToListAsync();
     }
-    public async Task<Material_Deportivo> ObtenerPorId(int id)
+
+    public async Task<Material_Deportivo?> ObtenerPorId(int id)
     {
         return await _db.MaterialesDeportivos.FindAsync(id);
     }
-    public async Task Agregar(Material_Deportivo materialDeportivo)
+
+    public async Task Agregar(Material_Deportivo material)
     {
-        _db.MaterialesDeportivos.Add(materialDeportivo);
+        _db.MaterialesDeportivos.Add(material);
         await _db.SaveChangesAsync();
     }
-    public async Task Actualizar(Material_Deportivo materialDeportivo)
+
+    public async Task Actualizar(Material_Deportivo material)
     {
-        _db.MaterialesDeportivos.Update(materialDeportivo);
+        _db.MaterialesDeportivos.Update(material);
         await _db.SaveChangesAsync();
     }
-    public async Task Eliminar(int id)
+
+    public async Task Eliminar(Material_Deportivo material)
     {
-        var materialDeportivo = await _db.MaterialesDeportivos.FindAsync(id);
-        if (materialDeportivo != null)
-        {
-            _db.MaterialesDeportivos.Remove(materialDeportivo);
-            await _db.SaveChangesAsync();
-        }
+        _db.MaterialesDeportivos.Remove(material);
+        await _db.SaveChangesAsync();
     }
 }

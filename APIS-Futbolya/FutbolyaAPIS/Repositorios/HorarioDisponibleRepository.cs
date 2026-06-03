@@ -2,15 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using FutbolyaAPIS.Datos;
 using FutbolyaAPIS.Entidades;
 
-
 namespace FutbolyaAPIS.Repositorios;
+
 public interface IHorarioDisponibleRepository
 {
     Task<IEnumerable<HorarioDisponible>> ObtenerTodos();
-    Task<HorarioDisponible> ObtenerPorId(int id);
-    Task Agregar(HorarioDisponible horarioDisponible);
-    Task Actualizar(HorarioDisponible horarioDisponible);
-    Task Eliminar(int id);
+    Task<HorarioDisponible?> ObtenerPorId(int id);
+    Task Agregar(HorarioDisponible horario);
+    Task Actualizar(HorarioDisponible horario);
+    Task Eliminar(HorarioDisponible horario);
 }
 
 public class HorarioDisponibleRepository : IHorarioDisponibleRepository
@@ -26,27 +26,27 @@ public class HorarioDisponibleRepository : IHorarioDisponibleRepository
     {
         return await _db.HorariosDisponibles.ToListAsync();
     }
-    public async Task<HorarioDisponible> ObtenerPorId(int id)
+
+    public async Task<HorarioDisponible?> ObtenerPorId(int id)
     {
         return await _db.HorariosDisponibles.FindAsync(id);
     }
-    public async Task Agregar(HorarioDisponible horarioDisponible)
+
+    public async Task Agregar(HorarioDisponible horario)
     {
-        _db.HorariosDisponibles.Add(horarioDisponible);
+        _db.HorariosDisponibles.Add(horario);
         await _db.SaveChangesAsync();
     }
-    public async Task Actualizar(HorarioDisponible horarioDisponible)
+
+    public async Task Actualizar(HorarioDisponible horario)
     {
-        _db.HorariosDisponibles.Update(horarioDisponible);
+        _db.HorariosDisponibles.Update(horario);
         await _db.SaveChangesAsync();
     }
-    public async Task Eliminar(int id)
+
+    public async Task Eliminar(HorarioDisponible horario)
     {
-        var horarioDisponible = await _db.HorariosDisponibles.FindAsync(id);
-        if (horarioDisponible != null)
-        {
-            _db.HorariosDisponibles.Remove(horarioDisponible);
-            await _db.SaveChangesAsync();
-        }
+        _db.HorariosDisponibles.Remove(horario);
+        await _db.SaveChangesAsync();
     }
 }
