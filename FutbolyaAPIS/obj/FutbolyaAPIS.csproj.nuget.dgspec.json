@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {}
+    "C:\\Users\\Usuario\\Desktop\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {
+    "C:\\Users\\Usuario\\Desktop\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
         "projectName": "FutbolyaAPIS",
-        "projectPath": "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+        "projectPath": "C:\\Users\\Usuario\\Desktop\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
         "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\APIS-Futbolya\\FutbolyaAPIS\\obj\\",
+        "outputPath": "C:\\Users\\Usuario\\Desktop\\APIS-Futbolya\\FutbolyaAPIS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

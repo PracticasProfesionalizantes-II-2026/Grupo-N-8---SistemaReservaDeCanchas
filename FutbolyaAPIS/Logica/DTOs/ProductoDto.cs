@@ -14,3 +14,5 @@ public record ProductoCreateDto(
     decimal Precio,
     string Tipo
 );
+
+public record StockUpdateDto(int Cantidad);

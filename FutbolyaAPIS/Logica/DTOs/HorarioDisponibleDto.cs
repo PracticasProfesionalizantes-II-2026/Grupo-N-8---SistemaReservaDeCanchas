@@ -12,3 +12,5 @@ public record HorarioDisponibleCreateDto(
     TimeSpan HoraFin,
     bool Activo
 );
+
+public record HorarioActivoUpdateDto(bool Activo);

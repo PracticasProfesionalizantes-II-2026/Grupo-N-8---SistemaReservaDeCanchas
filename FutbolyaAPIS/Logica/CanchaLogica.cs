@@ -9,7 +9,8 @@ public interface ICanchaLogica
     Task<IEnumerable<CanchaDto>> ObtenerTodos();
     Task<CanchaDto?> ObtenerPorId(int id);
     Task<int> Crear(CanchaCreateDto dto);
-    Task<bool> Actualizar(int id, CanchaCreateDto dto);
+    Task<bool> ActualizarDescripcion(int id, string descripcion);
+    Task<bool> ActualizarEstado(int id, bool estado);
     Task<bool> Eliminar(int id);
 }
 
@@ -50,22 +51,36 @@ public class CanchaLogica : ICanchaLogica
     {
         var cancha = new Cancha
         {
-            Nombre = dto.Nombre,
             Descripcion = dto.Descripcion,
-            Estado = dto.Estado
+            Nombre      = "Cancha N° 0",  // temporal hasta obtener el Id
+            Estado      = true            // true = Disponible por defecto
         };
+
         await _repo.Agregar(cancha);
+
+        cancha.Nombre = $"Cancha N° {cancha.Cod_Cancha}";
+        await _repo.Actualizar(cancha);
+
         return cancha.Cod_Cancha;
     }
 
-    public async Task<bool> Actualizar(int id, CanchaCreateDto dto)
+    public async Task<bool> ActualizarDescripcion(int id, string descripcion)
     {
         var cancha = await _repo.ObtenerPorId(id);
         if (cancha == null) return false;
 
-        cancha.Nombre = dto.Nombre;
-        cancha.Descripcion = dto.Descripcion;
-        cancha.Estado = dto.Estado;
+        cancha.Descripcion = descripcion;
+
+        await _repo.Actualizar(cancha);
+        return true;
+    }
+
+    public async Task<bool> ActualizarEstado(int id, bool estado)
+    {
+        var cancha = await _repo.ObtenerPorId(id);
+        if (cancha == null) return false;
+
+        cancha.Estado = estado;
 
         await _repo.Actualizar(cancha);
         return true;

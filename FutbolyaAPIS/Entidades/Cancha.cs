@@ -9,7 +9,7 @@ public class Cancha
 
     public string Descripcion { get; set; }
 
-    // Valores posibles: "Disponible" o "En Mantenimiento"
+    // Valores posibles: TRUE "Disponible" o FALSE "En Mantenimiento"
     public bool Estado { get; set; }
 
     // Navegación

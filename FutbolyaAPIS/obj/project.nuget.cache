@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PCECiHLfacM=",
+  "dgSpecHash": "ww9x8qKrHJk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+  "projectFilePath": "C:\\Users\\Usuario\\Desktop\\APIS-Futbolya\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
