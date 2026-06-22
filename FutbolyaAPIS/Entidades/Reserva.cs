@@ -34,5 +34,5 @@ public class Reserva
     [ForeignKey("Cod_Horario")]
     public HorarioDisponible HorarioDisponible { get; set; }
 
-    public ICollection<Reserva_Material> ReservaMateriales { get; set; }
+    public ICollection<Reserva_Material> ReservaMateriales { get; set; } = new List<Reserva_Material>();
 }

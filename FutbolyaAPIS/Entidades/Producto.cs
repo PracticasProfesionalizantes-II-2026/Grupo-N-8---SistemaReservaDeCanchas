@@ -17,5 +17,5 @@ public class Producto
 
 
     // Navegación
-    public ICollection<VentaDetallada> VentasDetalladas { get; set; }
+    public ICollection<VentaDetallada> VentasDetalladas { get; set; } = new List<VentaDetallada>();
 }

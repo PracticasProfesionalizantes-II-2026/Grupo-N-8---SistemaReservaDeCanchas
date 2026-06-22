@@ -13,5 +13,5 @@ public class HorarioDisponible
     public bool Activo { get; set; }
 
     // Navegación
-    public ICollection<Reserva> Reservas { get; set; }
+    public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 }

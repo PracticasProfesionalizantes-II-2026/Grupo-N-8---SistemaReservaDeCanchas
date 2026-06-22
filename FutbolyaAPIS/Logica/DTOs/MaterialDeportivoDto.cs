@@ -10,3 +10,5 @@ public record MaterialDeportivoCreateDto(
     string Nombre,
     int Cant_Material
 );
+
+public record MaterialStockUpdateDto(int Cant_Material);

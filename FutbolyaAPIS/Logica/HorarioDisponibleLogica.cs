@@ -47,14 +47,12 @@ public class HorarioDisponibleLogica : IHorarioDisponibleLogica
         );
     }
 
-    // ── ObtenerTodos ───────────────────────────────────────────────────
     public async Task<IEnumerable<HorarioDisponibleDto>> ObtenerTodos()
     {
         var horarios = await _repo.ObtenerTodos();
         return horarios.Select(MapDto);
     }
 
-    // ── ObtenerPorId ───────────────────────────────────────────────────
     public async Task<HorarioDisponibleDto?> ObtenerPorId(int id)
     {
         var h = await _repo.ObtenerPorId(id);
@@ -62,7 +60,6 @@ public class HorarioDisponibleLogica : IHorarioDisponibleLogica
         return MapDto(h);
     }
 
-    // ── Crear ──────────────────────────────────────────────────────────
     public async Task<(HorarioDisponibleDto? resultado, string? error)> Crear(HorarioDisponibleCreateDto dto)
     {
         if (await ExisteSolapamiento(dto.HoraInicio, dto.HoraFin))
@@ -79,7 +76,6 @@ public class HorarioDisponibleLogica : IHorarioDisponibleLogica
         return (MapDto(horario), null);
     }
 
-    // ── Actualizar ─────────────────────────────────────────────────────
     public async Task<(HorarioDisponibleDto? resultado, string? error)> Actualizar(int id, HorarioDisponibleCreateDto dto)
     {
         var horario = await _repo.ObtenerPorId(id);
@@ -97,7 +93,6 @@ public class HorarioDisponibleLogica : IHorarioDisponibleLogica
         return (MapDto(horario), null);
     }
 
-    // ── ActualizarActivo ───────────────────────────────────────────────
     public async Task<(HorarioDisponibleDto? resultado, string? error)> ActualizarActivo(int id, bool activo)
     {
         var horario = await _repo.ObtenerPorId(id);
@@ -118,7 +113,6 @@ public class HorarioDisponibleLogica : IHorarioDisponibleLogica
         return (MapDto(horario), null);
     }
 
-    // ── Eliminar ───────────────────────────────────────────────────────
     public async Task<(bool eliminado, string? error)> Eliminar(int id)
     {
         var horario = await _repo.ObtenerPorId(id);

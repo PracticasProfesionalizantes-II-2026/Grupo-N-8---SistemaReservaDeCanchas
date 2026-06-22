@@ -57,14 +57,12 @@ public class ReservaLogica : IReservaLogica
                 : null
         );
 
-    // ── ObtenerTodos ───────────────────────────────────────────────────
     public async Task<IEnumerable<ReservaDto>> ObtenerTodos()
     {
         var reservas = await _repo.ObtenerTodos();
         return reservas.Select(r => MapDto(r));
     }
 
-    // ── ObtenerPorId ───────────────────────────────────────────────────
     public async Task<ReservaDto?> ObtenerPorId(int id)
     {
         var r = await _repo.ObtenerPorId(id);
@@ -72,7 +70,6 @@ public class ReservaLogica : IReservaLogica
         return MapDto(r, conMateriales: true);
     }
 
-    // ── Crear ──────────────────────────────────────────────────────────
     public async Task<(ReservaDto? resultado, string? error)> Crear(ReservaCreateDto dto)
     {
         // Verificar stock disponible antes de crear
@@ -119,7 +116,6 @@ public class ReservaLogica : IReservaLogica
         return (MapDto(creada!, conMateriales: true), null);
     }
 
-    // ── Actualizar ─────────────────────────────────────────────────────
     public async Task<(ReservaDto? resultado, string? error)> Actualizar(int id, ReservaUpdateDto dto)
     {
         var reserva = await _repo.ObtenerPorId(id);
@@ -179,7 +175,6 @@ public class ReservaLogica : IReservaLogica
         return (MapDto(actualizada!, conMateriales: true), null);
     }
 
-    // ── Eliminar ───────────────────────────────────────────────────────
     public async Task Eliminar(int id)
     {
         var reserva = await _repo.ObtenerPorId(id);
@@ -199,7 +194,6 @@ public class ReservaLogica : IReservaLogica
         await _repo.Eliminar(reserva);
     }
 
-    // ── ObtenerMateriales ──────────────────────────────────────────────
     public async Task<IEnumerable<ReservaMaterialDto>> ObtenerMateriales(int idReserva)
     {
         var reserva = await _repo.ObtenerPorId(idReserva);
@@ -214,7 +208,6 @@ public class ReservaLogica : IReservaLogica
         )) ?? Enumerable.Empty<ReservaMaterialDto>();
     }
 
-    // ── AgregarMaterial ────────────────────────────────────────────────
     public async Task<(ReservaMaterialDto? resultado, string? error)> AgregarMaterial(int idReserva, ReservaMaterialAddDto dto)
     {
         var reserva = await _repo.ObtenerPorId(idReserva);
@@ -248,7 +241,6 @@ public class ReservaLogica : IReservaLogica
         ), null);
     }
 
-    // ── QuitarMaterial ─────────────────────────────────────────────────
     public async Task<(bool eliminado, string? error)> QuitarMaterial(int idReserva, int idReservaMat)
     {
         var reserva = await _repo.ObtenerPorId(idReserva);

@@ -20,5 +20,5 @@ public class Venta
     [ForeignKey("Cod_Usuario")]
     public Usuario Usuario { get; set; }
 
-    public ICollection<VentaDetallada> VentasDetalladas { get; set; }
+    public ICollection<VentaDetallada> VentasDetalladas { get; set; } = new List<VentaDetallada>();
 }

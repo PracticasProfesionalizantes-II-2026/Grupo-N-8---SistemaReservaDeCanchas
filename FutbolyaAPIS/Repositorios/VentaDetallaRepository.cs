@@ -25,7 +25,6 @@ public class VentaDetalladaRepository : IVentaDetalladaRepository
     public async Task<IEnumerable<VentaDetallada>> ObtenerTodos()
     {
         return await _db.VentasDetalladas
-                        .Include(vd => vd.Venta)
                         .Include(vd => vd.Producto)
                         .ToListAsync();
     }
@@ -33,7 +32,6 @@ public class VentaDetalladaRepository : IVentaDetalladaRepository
     public async Task<VentaDetallada?> ObtenerPorId(int id)
     {
         return await _db.VentasDetalladas
-                        .Include(vd => vd.Venta)
                         .Include(vd => vd.Producto)
                         .FirstOrDefaultAsync(vd => vd.Cod_Venta_Detallada == id);
     }

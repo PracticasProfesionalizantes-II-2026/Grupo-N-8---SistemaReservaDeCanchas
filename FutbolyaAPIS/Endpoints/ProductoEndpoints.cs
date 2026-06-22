@@ -7,8 +7,9 @@ public static class ProductoEndpoints
 {
     public static void MapProductoEndpoints(this IEndpointRouteBuilder app)
     {
+        var group = app.MapGroup("/api/productos").WithTags("Productos");
         // ── GET /api/productos ─────────────────────────────────────────
-        app.MapGet("/api/productos", async (
+        group.MapGet("/", async (
             IProductoLogica logica,
             string? tipo,
             string? nombre) =>
@@ -34,7 +35,7 @@ public static class ProductoEndpoints
         });
 
         // ── GET /api/productos/{id} ────────────────────────────────────
-        app.MapGet("/api/productos/{id:int}", async (int id, IProductoLogica logica) =>
+        group.MapGet("/{id:int}", async (int id, IProductoLogica logica) =>
         {
             try
             {
@@ -51,7 +52,7 @@ public static class ProductoEndpoints
         });
 
         // ── POST /api/productos ────────────────────────────────────────
-        app.MapPost("/api/productos", async (ProductoCreateDto dto, IProductoLogica logica) =>
+        group.MapPost("/", async (ProductoCreateDto dto, IProductoLogica logica) =>
         {
             try
             {
@@ -70,7 +71,7 @@ public static class ProductoEndpoints
         });
 
         // ── PUT /api/productos/{id} ────────────────────────────────────
-        app.MapPut("/api/productos/{id:int}", async (int id, ProductoCreateDto dto, IProductoLogica logica) =>
+        group.MapPut("/{id:int}", async (int id, ProductoCreateDto dto, IProductoLogica logica) =>
         {
             try
             {
@@ -91,7 +92,7 @@ public static class ProductoEndpoints
         });
 
         // ── PATCH /api/productos/{id}/stock ───────────────────────────
-        app.MapPatch("/api/productos/{id:int}/stock", async (int id, StockUpdateDto dto, IProductoLogica logica) =>
+        group.MapPatch("/{id:int}/stock", async (int id, StockUpdateDto dto, IProductoLogica logica) =>
         {
             try
             {
@@ -112,7 +113,7 @@ public static class ProductoEndpoints
         });
 
         // ── DELETE /api/productos/{id} ────────────────────────────────
-        app.MapDelete("/api/productos/{id:int}", async (int id, IProductoLogica logica) =>
+        group.MapDelete("/{id:int}", async (int id, IProductoLogica logica) =>
         {
             try
             {

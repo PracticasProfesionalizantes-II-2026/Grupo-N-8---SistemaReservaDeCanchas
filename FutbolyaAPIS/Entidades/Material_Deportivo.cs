@@ -13,6 +13,6 @@ public class Material_Deportivo
 
 
     // Navegación
-    public ICollection<Reserva_Material> ReservaMateriales { get; set; }
+    public ICollection<Reserva_Material> ReservaMateriales { get; set; }= new List<Reserva_Material>();
 
 }

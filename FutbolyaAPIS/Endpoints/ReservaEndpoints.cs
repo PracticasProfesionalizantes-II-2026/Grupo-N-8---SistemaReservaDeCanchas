@@ -7,8 +7,9 @@ public static class ReservaEndpoints
 {
     public static void MapReservaEndpoints(this IEndpointRouteBuilder app)
     {
+        var group = app.MapGroup("/api/reservas").WithTags("Reservas");
         // ── GET /api/reservas ──────────────────────────────────────────
-        app.MapGet("/api/reservas", async (IReservaLogica logica) =>
+        group.MapGet("/", async (IReservaLogica logica) =>
         {
             try
             {
@@ -22,7 +23,7 @@ public static class ReservaEndpoints
         });
 
         // ── GET /api/reservas/{id} ─────────────────────────────────────
-        app.MapGet("/api/reservas/{id:int}", async (int id, IReservaLogica logica) =>
+        group.MapGet("/{id:int}", async (int id, IReservaLogica logica) =>
         {
             try
             {
@@ -39,7 +40,7 @@ public static class ReservaEndpoints
         });
 
         // ── POST /api/reservas ─────────────────────────────────────────
-        app.MapPost("/api/reservas", async (ReservaCreateDto dto, IReservaLogica logica) =>
+        group.MapPost("/", async (ReservaCreateDto dto, IReservaLogica logica) =>
         {
             try
             {
@@ -62,7 +63,7 @@ public static class ReservaEndpoints
         });
 
         // ── PUT /api/reservas/{id} ─────────────────────────────────────
-        app.MapPut("/api/reservas/{id:int}", async (int id, ReservaUpdateDto dto, IReservaLogica logica) =>
+        group.MapPut("/{id:int}", async (int id, ReservaUpdateDto dto, IReservaLogica logica) =>
         {
             try
             {
@@ -85,7 +86,7 @@ public static class ReservaEndpoints
         });
 
         // ── DELETE /api/reservas/{id} ──────────────────────────────────
-        app.MapDelete("/api/reservas/{id:int}", async (int id, IReservaLogica logica) =>
+        group.MapDelete("/{id:int}", async (int id, IReservaLogica logica) =>
         {
             try
             {
@@ -103,7 +104,7 @@ public static class ReservaEndpoints
         });
 
         // ── GET /api/reservas/{id}/materiales ──────────────────────────
-        app.MapGet("/api/reservas/{id:int}/materiales", async (int id, IReservaLogica logica) =>
+        group.MapGet("/{id:int}/materiales", async (int id, IReservaLogica logica) =>
         {
             try
             {
@@ -121,7 +122,7 @@ public static class ReservaEndpoints
         });
 
         // ── POST /api/reservas/{id}/materiales ─────────────────────────
-        app.MapPost("/api/reservas/{id:int}/materiales", async (int id, ReservaMaterialAddDto dto, IReservaLogica logica) =>
+        group.MapPost("/{id:int}/materiales", async (int id, ReservaMaterialAddDto dto, IReservaLogica logica) =>
         {
             try
             {
@@ -144,7 +145,7 @@ public static class ReservaEndpoints
         });
 
         // ── DELETE /api/reservas/{id}/materiales/{mat_id} ─────────────
-        app.MapDelete("/api/reservas/{id:int}/materiales/{mat_id:int}", async (int id, int mat_id, IReservaLogica logica) =>
+        group.MapDelete("/{id:int}/materiales/{mat_id:int}", async (int id, int mat_id, IReservaLogica logica) =>
         {
             try
             {

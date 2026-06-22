@@ -11,16 +11,18 @@ public interface ICanchaLogica
     Task<int> Crear(CanchaCreateDto dto);
     Task<bool> ActualizarDescripcion(int id, string descripcion);
     Task<bool> ActualizarEstado(int id, bool estado);
-    Task<bool> Eliminar(int id);
+    Task<(bool eliminado, string? error)> Eliminar(int id);
 }
 
 public class CanchaLogica : ICanchaLogica
 {
     private readonly ICanchaRepository _repo;
+    private readonly IReservaRepository _repoReserva;
 
-    public CanchaLogica(ICanchaRepository repo)
+    public CanchaLogica(ICanchaRepository repo, IReservaRepository repoReserva)
     {
-        _repo = repo;
+        _repo        = repo;
+        _repoReserva = repoReserva;
     }
 
     public async Task<IEnumerable<CanchaDto>> ObtenerTodos()
@@ -52,8 +54,8 @@ public class CanchaLogica : ICanchaLogica
         var cancha = new Cancha
         {
             Descripcion = dto.Descripcion,
-            Nombre      = "Cancha N° 0",  // temporal hasta obtener el Id
-            Estado      = true            // true = Disponible por defecto
+            Nombre      = "Cancha N° 0",
+            Estado      = true
         };
 
         await _repo.Agregar(cancha);
@@ -86,12 +88,17 @@ public class CanchaLogica : ICanchaLogica
         return true;
     }
 
-    public async Task<bool> Eliminar(int id)
+    public async Task<(bool eliminado, string? error)> Eliminar(int id)
     {
         var cancha = await _repo.ObtenerPorId(id);
-        if (cancha == null) return false;
+        if (cancha == null)
+            return (false, "NOT_FOUND");
+
+        var reservas = await _repoReserva.ObtenerTodos();
+        if (reservas.Any(r => r.Cod_Cancha == id))
+            return (false, "No se puede eliminar una cancha con reservas asociadas");
 
         await _repo.Eliminar(cancha);
-        return true;
+        return (true, null);
     }
 }

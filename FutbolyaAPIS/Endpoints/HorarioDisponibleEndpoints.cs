@@ -7,8 +7,10 @@ public static class HorarioDisponibleEndpoints
 {
     public static void MapHorarioDisponibleEndpoints(this IEndpointRouteBuilder app)
     {
+        var group = app.MapGroup("/api/horarios").WithTags("Horarios Disponibles");
+
         // ── GET /api/horarios ──────────────────────────────────────────
-        app.MapGet("/api/horarios", async (IHorarioDisponibleLogica logica) =>
+        group.MapGet("/", async (IHorarioDisponibleLogica logica) =>
         {
             try
             {
@@ -22,7 +24,7 @@ public static class HorarioDisponibleEndpoints
         });
 
         // ── GET /api/horarios/{id} ─────────────────────────────────────
-        app.MapGet("/api/horarios/{id:int}", async (int id, IHorarioDisponibleLogica logica) =>
+        group.MapGet("/{id:int}", async (int id, IHorarioDisponibleLogica logica) =>
         {
             try
             {
@@ -39,7 +41,7 @@ public static class HorarioDisponibleEndpoints
         });
 
         // ── POST /api/horarios ─────────────────────────────────────────
-        app.MapPost("/api/horarios", async (HorarioDisponibleCreateDto dto, IHorarioDisponibleLogica logica) =>
+        group.MapPost("/", async (HorarioDisponibleCreateDto dto, IHorarioDisponibleLogica logica) =>
         {
             try
             {
@@ -60,7 +62,7 @@ public static class HorarioDisponibleEndpoints
         });
 
         // ── PUT /api/horarios/{id} ─────────────────────────────────────
-        app.MapPut("/api/horarios/{id:int}", async (int id, HorarioDisponibleCreateDto dto, IHorarioDisponibleLogica logica) =>
+        group.MapPut("/{id:int}", async (int id, HorarioDisponibleCreateDto dto, IHorarioDisponibleLogica logica) =>
         {
             try
             {
@@ -83,7 +85,7 @@ public static class HorarioDisponibleEndpoints
         });
 
         // ── PATCH /api/horarios/{id}/activo ────────────────────────────
-        app.MapPatch("/api/horarios/{id:int}/activo", async (int id, HorarioActivoUpdateDto dto, IHorarioDisponibleLogica logica) =>
+        group.MapPatch("/{id:int}/activo", async (int id, HorarioActivoUpdateDto dto, IHorarioDisponibleLogica logica) =>
         {
             try
             {
@@ -103,7 +105,7 @@ public static class HorarioDisponibleEndpoints
         });
 
         // ── DELETE /api/horarios/{id} ──────────────────────────────────
-        app.MapDelete("/api/horarios/{id:int}", async (int id, IHorarioDisponibleLogica logica) =>
+        group.MapDelete("/{id:int}", async (int id, IHorarioDisponibleLogica logica) =>
         {
             try
             {

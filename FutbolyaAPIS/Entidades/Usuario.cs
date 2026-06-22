@@ -11,11 +11,11 @@ public class Usuario
     public string Direccion { get; set; }
     public string Correo { get; set; }
     public string Contraseña { get; set; }
-    public bool Rol { get; set; } // Valores posibles: "Operador" o "Administrador"
+    public bool Rol { get; set; } // Valores posibles: FALSE:"Operador" o TRUE:"Administrador"
     public bool Cambiar_Contraseña { get; set; }
 
     
     // Navegación
-    public ICollection<Venta> Ventas { get; set; }
-    public ICollection<Reserva> Reservas { get; set; }
+    public ICollection<Venta> Ventas { get; set; } = new List<Venta>();
+    public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 }

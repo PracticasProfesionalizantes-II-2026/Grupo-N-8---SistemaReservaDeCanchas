@@ -17,10 +17,12 @@ public interface IProductoLogica
 public class ProductoLogica : IProductoLogica
 {
     private readonly IProductoRepository _repo;
+    private readonly IVentaDetalladaRepository _repoVentaDetallada;
 
-    public ProductoLogica(IProductoRepository repo)
+    public ProductoLogica(IProductoRepository repo, IVentaDetalladaRepository repoVentaDetallada)
     {
-        _repo = repo;
+        _repo               = repo;
+        _repoVentaDetallada = repoVentaDetallada;
     }
 
     public async Task<IEnumerable<ProductoDto>> ObtenerTodos()
@@ -91,6 +93,10 @@ public class ProductoLogica : IProductoLogica
     {
         var producto = await _repo.ObtenerPorId(id);
         if (producto == null) return false;
+
+        var detalles = await _repoVentaDetallada.ObtenerTodos();
+        if (detalles.Any(vd => vd.Cod_Producto == id))
+            return false; // el endpoint interpreta esto como 409
 
         await _repo.Eliminar(producto);
         return true;

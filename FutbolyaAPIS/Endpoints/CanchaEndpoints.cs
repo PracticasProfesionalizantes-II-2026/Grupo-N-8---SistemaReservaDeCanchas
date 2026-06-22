@@ -7,8 +7,9 @@ public static class CanchaEndpoints
 {
     public static void MapCanchaEndpoints(this IEndpointRouteBuilder app)
     {
+        var group = app.MapGroup("/api/canchas").WithTags("Canchas");
         // ── GET /api/canchas ───────────────────────────────────────────
-        app.MapGet("/api/canchas", async (ICanchaLogica logica) =>
+        group.MapGet("/", async (ICanchaLogica logica) =>
         {
             try
             {
@@ -22,7 +23,7 @@ public static class CanchaEndpoints
         });
 
         // ── GET /api/canchas/{id} ──────────────────────────────────────
-        app.MapGet("/api/canchas/{id:int}", async (int id, ICanchaLogica logica) =>
+        group.MapGet("/{id:int}", async (int id, ICanchaLogica logica) =>
         {
             try
             {
@@ -39,7 +40,7 @@ public static class CanchaEndpoints
         });
 
         // ── GET /api/canchas/{id}/disponibilidad ───────────────────────
-        app.MapGet("/api/canchas/{id:int}/disponibilidad", async (int id, ICanchaLogica logica) =>
+        group.MapGet("/{id:int}/disponibilidad", async (int id, ICanchaLogica logica) =>
         {
             try
             {
@@ -57,7 +58,7 @@ public static class CanchaEndpoints
         });
 
         // ── POST /api/canchas ──────────────────────────────────────────
-        app.MapPost("/api/canchas", async (CanchaCreateDto dto, ICanchaLogica logica) =>
+        group.MapPost("/", async (CanchaCreateDto dto, ICanchaLogica logica) =>
         {
             try
             {
@@ -76,7 +77,7 @@ public static class CanchaEndpoints
         });
 
         // ── PATCH /api/canchas/{id} ────────────────────────────────────
-        app.MapPatch("/api/canchas/{id:int}", async (int id, CanchaDescripcionUpdateDto dto, ICanchaLogica logica) =>
+        group.MapPatch("/{id:int}", async (int id, CanchaDescripcionUpdateDto dto, ICanchaLogica logica) =>
         {
             try
             {
@@ -97,7 +98,7 @@ public static class CanchaEndpoints
         });
 
         // ── PATCH /api/canchas/{id}/estado ────────────────────────────
-        app.MapPatch("/api/canchas/{id:int}/estado", async (int id, CanchaEstadoUpdateDto dto, ICanchaLogica logica) =>
+        group.MapPatch("/{id:int}/estado", async (int id, CanchaEstadoUpdateDto dto, ICanchaLogica logica) =>
         {
             try
             {
@@ -114,18 +115,17 @@ public static class CanchaEndpoints
             }
         });
 
-        // ── DELETE /api/canchas/{id} ───────────────────────────────────
-        app.MapDelete("/api/canchas/{id:int}", async (int id, ICanchaLogica logica) =>
+        // ── DELETE /api/canchas/{id} ───────────────────────────────────────────
+        group.MapDelete("/{id:int}", async (int id, ICanchaLogica logica) =>
         {
             try
             {
-                var cancha = await logica.ObtenerPorId(id);
-                if (cancha is null)
-                    return Results.NotFound(new { mensaje = "Cancha no encontrada", cod_cancha = id });
+                var (eliminado, error) = await logica.Eliminar(id);
 
-                var eliminado = await logica.Eliminar(id);
                 if (!eliminado)
-                    return Results.Conflict(new { mensaje = "No se puede eliminar una cancha con reservas asociadas" });
+                    return error == "NOT_FOUND"
+                        ? Results.NotFound(new { mensaje = "Cancha no encontrada", cod_cancha = id })
+                        : Results.Conflict(new { mensaje = error });
 
                 return Results.Ok(new { mensaje = "Cancha eliminada correctamente", cod_cancha = id });
             }

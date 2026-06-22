@@ -27,8 +27,7 @@ public class AppDbContext : DbContext
             entity.HasKey(u => u.Cod_Usuario);
 
             entity.Property(u => u.Rol)
-                  .IsRequired()
-                  .HasMaxLength(20);
+                  .IsRequired();
 
             entity.Property(u => u.Correo)
                   .IsRequired();
@@ -94,15 +93,19 @@ public class AppDbContext : DbContext
         });
 
         // ── Cancha ────────────────────────────────────────────
-
         modelBuilder.Entity<Cancha>(entity =>
         {
             entity.HasKey(c => c.Cod_Cancha);
 
-            // Valores: "Disponible" o "En Mantenimiento"
-            entity.Property(c => c.Estado)
+            entity.Property(c => c.Nombre)
                   .IsRequired()
-                  .HasMaxLength(20);
+                  .HasMaxLength(50);
+
+            entity.Property(c => c.Descripcion)
+                  .IsRequired();
+
+            entity.Property(c => c.Estado)
+                  .IsRequired();
         });
 
         // ── HorarioDisponible ─────────────────────────────────
