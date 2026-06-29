@@ -3163,11 +3163,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
       "projectName": "FutbolyaAPIS",
-      "projectPath": "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+      "projectPath": "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\obj\\",
+      "outputPath": "C:\\Users\\Usuario\\Documents\\GitHub\\2026Grupo-N-8---SistemaReservaDeCanchas\\FutbolyaAPIS\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
