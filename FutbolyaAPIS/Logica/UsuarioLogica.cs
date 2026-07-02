@@ -11,6 +11,7 @@ public interface IUsuarioLogica
     Task<(UsuarioDto? resultado, string? error)> Crear(UsuarioCreateDto dto);
     Task<(UsuarioDto? resultado, string? error)> Actualizar(int id, UsuarioUpdateDto dto);
     Task<(CambiarContraseñaResponseDto? resultado, string? error)> CambiarContrasena(int id, CambiarContraseñaDto dto);
+    Task<(CambiarContraseñaResponseDto? resultado, string? error)> ResetearContrasena(int id, ResetearContraseñaDto dto);
     Task<(LoginResponseDto? resultado, string? error)> Login(LoginDto dto);
     Task<(bool eliminado, string? error)> Eliminar(int id);
 }
@@ -18,10 +19,17 @@ public interface IUsuarioLogica
 public class UsuarioLogica : IUsuarioLogica
 {
     private readonly IUsuarioRepository _repo;
+    private readonly IReservaRepository _repoReserva;
+    private readonly IVentaRepository _repoVenta;
 
-    public UsuarioLogica(IUsuarioRepository repo)
+    public UsuarioLogica(
+        IUsuarioRepository repo,
+        IReservaRepository repoReserva,
+        IVentaRepository repoVenta)
     {
         _repo = repo;
+        _repoReserva = repoReserva;
+        _repoVenta = repoVenta;
     }
 
     // ── Mapeo privado ──────────────────────────────────────────────────
@@ -123,6 +131,33 @@ public class UsuarioLogica : IUsuarioLogica
         ), null);
     }
 
+    public async Task<(CambiarContraseñaResponseDto? resultado, string? error)> ResetearContrasena(int id, ResetearContraseñaDto dto)
+    {
+        var usuario = await _repo.ObtenerPorId(id);
+        if (usuario == null)
+            return (null, "NOT_FOUND");
+
+        usuario.Contraseña         = dto.Contrasena_Temporal;
+        usuario.Cambiar_Contraseña = true;  // debe cambiar su contraseña al iniciar sesión
+
+        await _repo.Actualizar(usuario);
+
+        return (new CambiarContraseñaResponseDto(
+            "Contraseña temporal asignada correctamente",
+            usuario.Cambiar_Contraseña
+        ), null);
+    }
+
+    //en esta seccion queria aclarar algo, si bien login no tiene una validacion 
+    //de que el usuario tenga que cambiar la contraseña, 
+    //si se puede hacer en el front, ya que cuando se loguea y el campo Cambiar_Contraseña es true,
+    //se puede redirigir a la pagina de cambiar contraseña, 
+    //y si es false, se redirige a la pagina principal. 
+    //Esto es una decision de diseño y no afectaria en teoria al funcionamiento del sistema.
+    //otra aclaracion es que no agregamos hash a las contraseñas, 
+    //debido a que es un tema q no se habia tocado en el proyecto y no queriamos agregarlo sin consultarlo antes,
+    //pero si se puede agregar en el futuro, ya que la logica de login y
+    //cambio de contraseña se puede modificar para que funcione con hash.
     public async Task<(LoginResponseDto? resultado, string? error)> Login(LoginDto dto)
     {
         var usuarios = await _repo.ObtenerTodos();
@@ -151,6 +186,14 @@ public class UsuarioLogica : IUsuarioLogica
         if (usuario.Rol == true)
             return (false, "No se puede eliminar un usuario con rol Administrador");
 
+        var reservas = await _repoReserva.ObtenerTodos();
+        if (reservas.Any(r => r.Cod_Usuario == id))
+            return (false, "No se puede eliminar un usuario que tiene reservas asociadas");
+
+        var ventas = await _repoVenta.ObtenerTodos();
+        if (ventas.Any(v => v.Cod_Usuario == id))
+            return (false, "No se puede eliminar un usuario que tiene ventas asociadas");
+        
         await _repo.Eliminar(usuario);
         return (true, null);
     }

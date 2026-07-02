@@ -12,7 +12,8 @@ public record ReservaMaterialDto(
 
 public record ReservaDto(
     int Cod_Reserva,
-    DateTime Fecha,
+    DateTime Fecha,           // fecha de creación, la asigna el sistema
+    DateTime FechaReserva,    // fecha para la que se reserva
     string Dni_Cliente,
     string Telefono_Cliente,
     int Cod_Cancha,
@@ -34,7 +35,7 @@ public record ReservaMaterialItemDto(
 );
 
 public record ReservaCreateDto(
-    DateTime Fecha,
+    DateTime FechaReserva,    
     string Dni_Cliente,
     string Telefono_Cliente,
     int Cod_Cancha,
@@ -45,7 +46,7 @@ public record ReservaCreateDto(
 );
 
 public record ReservaUpdateDto(
-    DateTime Fecha,
+    DateTime FechaReserva,    
     string Dni_Cliente,
     string Telefono_Cliente,
     int Cod_Cancha,

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FutbolyaAPIS.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -98,6 +98,7 @@ namespace FutbolyaAPIS.Migrations
                     Cod_Reserva = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaReserva = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Dni_Cliente = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Telefono_Cliente = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cod_Cancha = table.Column<int>(type: "int", nullable: false),

@@ -21,15 +21,24 @@ public class ReservaLogica : IReservaLogica
     private readonly IReservaRepository _repo;
     private readonly IReservaMaterialRepository _repoMaterial;
     private readonly IMaterialDeportivoRepository _repoStock;
+    private readonly ICanchaRepository _repoCancha;
+    private readonly IHorarioDisponibleRepository _repoHorario;
+    private readonly IUsuarioRepository _repoUsuario;
 
     public ReservaLogica(
         IReservaRepository repo,
         IReservaMaterialRepository repoMaterial,
-        IMaterialDeportivoRepository repoStock)
+        IMaterialDeportivoRepository repoStock,
+        ICanchaRepository repoCancha,
+        IHorarioDisponibleRepository repoHorario,
+        IUsuarioRepository repoUsuario)
     {
-        _repo         = repo;
+        _repo        = repo;
         _repoMaterial = repoMaterial;
-        _repoStock    = repoStock;
+        _repoStock   = repoStock;
+        _repoCancha  = repoCancha;
+        _repoHorario = repoHorario;
+        _repoUsuario = repoUsuario;
     }
 
     // ── Mapeo privado ──────────────────────────────────────────────────
@@ -37,6 +46,7 @@ public class ReservaLogica : IReservaLogica
         new ReservaDto(
             r.Cod_Reserva,
             r.Fecha,
+            r.FechaReserva,
             r.Dni_Cliente,
             r.Telefono_Cliente,
             r.Cod_Cancha,
@@ -72,7 +82,40 @@ public class ReservaLogica : IReservaLogica
 
     public async Task<(ReservaDto? resultado, string? error)> Crear(ReservaCreateDto dto)
     {
-        // Verificar stock disponible antes de crear
+        //Verificar que la fecha de reserva no sea en el pasado
+        if (dto.FechaReserva.Date < DateTime.Today)
+            return (null, "La fecha de reserva no puede ser en el pasado");
+
+        //Verificar que la cancha exista y esté disponible
+        var cancha = await _repoCancha.ObtenerPorId(dto.Cod_Cancha);
+        if (cancha == null)
+            return (null, "NOT_FOUND");
+        if (!cancha.Estado)
+            return (null, "La cancha no está disponible actualmente");
+
+        //Verificar que el horario exista y esté activo
+        var horario = await _repoHorario.ObtenerPorId(dto.Cod_Horario);
+        if (horario == null)
+            return (null, "NOT_FOUND");
+        if (!horario.Activo)
+            return (null, "El horario seleccionado no está activo");
+
+        //Verificar que la cancha no esté reservada en esa fecha y horario
+        var reservasExistentes = await _repo.ObtenerTodos();
+        var canchaOcupada = reservasExistentes.Any(r =>
+            r.Cod_Cancha        == dto.Cod_Cancha  &&
+            r.Cod_Horario       == dto.Cod_Horario &&
+            r.FechaReserva.Date == dto.FechaReserva.Date);
+
+        if (canchaOcupada)
+            return (null, "La cancha ya está reservada para ese horario y fecha");
+
+        //Verificar que el usuario exista
+        var usuario = await _repoUsuario.ObtenerPorId(dto.Cod_Usuario);
+        if (usuario == null)
+            return (null, "NOT_FOUND");
+
+        //Verificar stock disponible antes de crear
         foreach (var item in dto.Materiales)
         {
             var material = await _repoStock.ObtenerPorId(item.Cod_Material);
@@ -85,7 +128,8 @@ public class ReservaLogica : IReservaLogica
 
         var reserva = new Reserva
         {
-            Fecha            = dto.Fecha,
+            Fecha            = DateTime.Now, // La fecha de creación se asigna automáticamente
+            FechaReserva     = dto.FechaReserva,
             Dni_Cliente      = dto.Dni_Cliente,
             Telefono_Cliente = dto.Telefono_Cliente,
             Cod_Cancha       = dto.Cod_Cancha,
@@ -122,6 +166,35 @@ public class ReservaLogica : IReservaLogica
         if (reserva == null)
             return (null, "NOT_FOUND");
 
+        //Verificar que la fecha de reserva no sea en el pasado
+        if (dto.FechaReserva.Date < DateTime.Today)
+            return (null, "La fecha de reserva no puede ser en el pasado");
+
+        //Verificar que la cancha exista y esté disponible
+        var cancha = await _repoCancha.ObtenerPorId(dto.Cod_Cancha);
+        if (cancha == null)
+            return (null, "NOT_FOUND");
+        if (!cancha.Estado)
+            return (null, "La cancha no está disponible actualmente");
+
+        //Verificar que el horario exista y esté activo
+        var horario = await _repoHorario.ObtenerPorId(dto.Cod_Horario);
+        if (horario == null)
+            return (null, "NOT_FOUND");
+        if (!horario.Activo)
+            return (null, "El horario seleccionado no está activo");
+
+        //Verificar que la cancha no esté ocupada en esa fecha y horario
+        var reservasExistentes = await _repo.ObtenerTodos();
+        var canchaOcupada = reservasExistentes.Any(r =>
+            r.Cod_Reserva       != id             &&
+            r.Cod_Cancha        == dto.Cod_Cancha &&
+            r.Cod_Horario       == dto.Cod_Horario &&
+            r.FechaReserva.Date == dto.FechaReserva.Date);
+
+        if (canchaOcupada)
+            return (null, "La cancha ya está reservada para ese horario y fecha");
+
         // Liberar stock de materiales anteriores
         foreach (var rm in reserva.ReservaMateriales ?? Enumerable.Empty<Reserva_Material>())
         {
@@ -134,7 +207,7 @@ public class ReservaLogica : IReservaLogica
             await _repoMaterial.Eliminar(rm);
         }
 
-        // Verificar stock de nuevos materiales
+        // 5. Verificar stock de nuevos materiales
         foreach (var item in dto.Materiales)
         {
             var material = await _repoStock.ObtenerPorId(item.Cod_Material);
@@ -146,7 +219,7 @@ public class ReservaLogica : IReservaLogica
         }
 
         // Actualizar datos de la reserva
-        reserva.Fecha            = dto.Fecha;
+        reserva.FechaReserva     = dto.FechaReserva;
         reserva.Dni_Cliente      = dto.Dni_Cliente;
         reserva.Telefono_Cliente = dto.Telefono_Cliente;
         reserva.Cod_Cancha       = dto.Cod_Cancha;

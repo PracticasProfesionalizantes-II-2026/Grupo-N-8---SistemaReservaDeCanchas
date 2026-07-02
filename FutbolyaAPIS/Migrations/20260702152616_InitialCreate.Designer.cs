@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FutbolyaAPIS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260615005755_Inicial")]
-    partial class Inicial
+    [Migration("20260702152616_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,6 +145,9 @@ namespace FutbolyaAPIS.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaReserva")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Telefono_Cliente")

@@ -62,6 +62,9 @@ public class HorarioDisponibleLogica : IHorarioDisponibleLogica
 
     public async Task<(HorarioDisponibleDto? resultado, string? error)> Crear(HorarioDisponibleCreateDto dto)
     {
+        if (dto.HoraInicio.Minutes != 0 || dto.HoraInicio.Seconds != 0 || dto.HoraFin.Minutes != 0 || dto.HoraFin.Seconds != 0)
+            return (null, "Las horas deben ser enteras, sin minutos");
+            
         if (await ExisteSolapamiento(dto.HoraInicio, dto.HoraFin))
             return (null, "Ya existe un horario que se superpone con la franja horaria indicada");
 
@@ -81,6 +84,9 @@ public class HorarioDisponibleLogica : IHorarioDisponibleLogica
         var horario = await _repo.ObtenerPorId(id);
         if (horario == null)
             return (null, "NOT_FOUND");
+
+        if (dto.HoraInicio.Minutes != 0 || dto.HoraInicio.Seconds != 0 || dto.HoraFin.Minutes != 0 || dto.HoraFin.Seconds != 0)
+            return (null, "Las horas deben ser enteras, sin minutos");
 
         if (await ExisteSolapamiento(dto.HoraInicio, dto.HoraFin, ignorarId: id))
             return (null, "Ya existe un horario que se superpone con la franja horaria indicada");

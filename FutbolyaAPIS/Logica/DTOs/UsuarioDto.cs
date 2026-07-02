@@ -50,6 +50,10 @@ public record CambiarContraseñaDto(
     string Contrasena_Nueva_Confirmacion
 );
 
+public record ResetearContraseñaDto(
+    string Contrasena_Temporal
+);
+
 public record LoginDto(
     string Correo,
     string Contrasena

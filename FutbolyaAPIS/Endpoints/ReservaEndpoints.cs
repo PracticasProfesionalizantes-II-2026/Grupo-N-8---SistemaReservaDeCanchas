@@ -9,6 +9,7 @@ public static class ReservaEndpoints
     {
         var group = app.MapGroup("/api/reservas").WithTags("Reservas");
         // ── GET /api/reservas ──────────────────────────────────────────
+        //Obtiene todas las reservas.
         group.MapGet("/", async (IReservaLogica logica) =>
         {
             try
@@ -23,6 +24,7 @@ public static class ReservaEndpoints
         });
 
         // ── GET /api/reservas/{id} ─────────────────────────────────────
+        // Obtiene una reserva específica por su ID.
         group.MapGet("/{id:int}", async (int id, IReservaLogica logica) =>
         {
             try
@@ -40,6 +42,7 @@ public static class ReservaEndpoints
         });
 
         // ── POST /api/reservas ─────────────────────────────────────────
+        // Crea una nueva reserva.
         group.MapPost("/", async (ReservaCreateDto dto, IReservaLogica logica) =>
         {
             try
@@ -47,9 +50,11 @@ public static class ReservaEndpoints
                 if (string.IsNullOrWhiteSpace(dto.Dni_Cliente) || string.IsNullOrWhiteSpace(dto.Telefono_Cliente))
                     return Results.BadRequest(new { mensaje = "DNI y teléfono del cliente son obligatorios" });
 
+                // Intenta crear una nueva reserva utilizando la lógica de negocio.
                 var (resultado, error) = await logica.Crear(dto);
 
                 if (resultado is null)
+                    // Si no se pudo crear la reserva, devuelve un error 404 o 409 según corresponda.
                     return error == "NOT_FOUND"
                         ? Results.NotFound(new { mensaje = "Cancha, usuario, horario o material no encontrado" })
                         : Results.Conflict(new { mensaje = error });

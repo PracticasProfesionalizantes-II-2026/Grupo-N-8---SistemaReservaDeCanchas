@@ -9,6 +9,7 @@ public static class UsuarioEndpoints
     {
         var group = app.MapGroup("/api/usuarios").WithTags("Usuarios");
         // ── GET /api/usuarios ──────────────────────────────────────────
+        //Lista todos los usuarios
         group.MapGet("/", async (IUsuarioLogica logica) =>
         {
             try
@@ -23,6 +24,7 @@ public static class UsuarioEndpoints
         });
 
         // ── GET /api/usuarios/{id} ─────────────────────────────────────
+        //Obtiene un usuario por su ID
         group.MapGet("/{id:int}", async (int id, IUsuarioLogica logica) =>
         {
             try
@@ -40,10 +42,12 @@ public static class UsuarioEndpoints
         });
 
         // ── POST /api/usuarios ─────────────────────────────────────────
+        //Crea un nuevo usuario
         group.MapPost("/", async (UsuarioCreateDto dto, IUsuarioLogica logica) =>
         {
             try
             {
+                //validación de campos obligatorios
                 if (string.IsNullOrWhiteSpace(dto.Nombre)    ||
                     string.IsNullOrWhiteSpace(dto.Apellido)  ||
                     string.IsNullOrWhiteSpace(dto.Dni)       ||
@@ -53,6 +57,7 @@ public static class UsuarioEndpoints
 
                 var (resultado, error) = await logica.Crear(dto);
 
+                // Si el resultado es nulo, significa que hubo un error (por ejemplo, conflicto de DNI o correo)
                 if (resultado is null)
                     return Results.Conflict(new { mensaje = error });
 
@@ -65,10 +70,12 @@ public static class UsuarioEndpoints
         });
 
         // ── PUT /api/usuarios/{id} ─────────────────────────────────────
+        //Actualiza un usuario existente
         group.MapPut("/{id:int}", async (int id, UsuarioUpdateDto dto, IUsuarioLogica logica) =>
         {
             try
             {
+                //validamos campos obligatorios
                 if (string.IsNullOrWhiteSpace(dto.Nombre)   ||
                     string.IsNullOrWhiteSpace(dto.Apellido) ||
                     string.IsNullOrWhiteSpace(dto.Dni)      ||
@@ -77,6 +84,7 @@ public static class UsuarioEndpoints
 
                 var (resultado, error) = await logica.Actualizar(id, dto);
 
+                // Si el resultado es nulo, significa que hubo un error (por ejemplo, usuario no encontrado o conflicto de DNI/correo)
                 if (resultado is null)
                     return error == "NOT_FOUND"
                         ? Results.NotFound(new { mensaje = "Usuario no encontrado", cod_usuario = id })
@@ -91,6 +99,7 @@ public static class UsuarioEndpoints
         });
 
         // ── PATCH /api/usuarios/{id}/contrasena ────────────────────────
+        //Actualiza la contraseña de un usuario existente(boton de su perfil)
         group.MapPatch("/{id:int}/contrasena", async (int id, CambiarContraseñaDto dto, IUsuarioLogica logica) =>
         {
             try
@@ -117,7 +126,32 @@ public static class UsuarioEndpoints
             }
         });
 
+        // ── PATCH /api/usuarios/{id}/resetear-contrasena ─────────────────
+        //Resetea la contraseña de un usuario existente (boton de administrador)
+        group.MapPatch("/{id:int}/resetear-contrasena", async (int id, ResetearContraseñaDto dto, IUsuarioLogica logica) =>
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(dto.Contrasena_Temporal))
+                    return Results.BadRequest(new { mensaje = "La contraseña temporal no puede estar vacía" });
+                
+                var (resultado, error) = await logica.ResetearContrasena(id, dto);
+
+                if (resultado is null)
+                    return error == "NOT_FOUND"
+                        ? Results.NotFound(new { mensaje = "Usuario no encontrado", cod_usuario = id })
+                        : Results.BadRequest(new { mensaje = error });
+
+                return Results.Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
         // ── POST /api/auth/login ───────────────────────────────────────
+        //Autentica un usuario y devuelve un token JWT
         group.MapPost("/api/auth/login", async (LoginDto dto, IUsuarioLogica logica) =>
         {
             try
@@ -140,12 +174,14 @@ public static class UsuarioEndpoints
         });
 
         // ── DELETE /api/usuarios/{id} ──────────────────────────────────
+        //Elimina un usuario existente
         group.MapDelete("/{id:int}", async (int id, IUsuarioLogica logica) =>
         {
             try
             {
                 var (eliminado, error) = await logica.Eliminar(id);
 
+                // Si no se pudo eliminar, devolvemos un error adecuado
                 if (!eliminado)
                     return error == "NOT_FOUND"
                         ? Results.NotFound(new { mensaje = "Usuario no encontrado", cod_usuario = id })

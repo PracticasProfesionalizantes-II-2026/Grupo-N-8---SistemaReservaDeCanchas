@@ -144,6 +144,9 @@ namespace FutbolyaAPIS.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("FechaReserva")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Telefono_Cliente")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

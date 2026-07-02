@@ -121,6 +121,12 @@ public class AppDbContext : DbContext
         {
             entity.HasKey(r => r.Cod_Reserva);
 
+            entity.Property(r => r.Fecha)
+                  .IsRequired();
+            
+            entity.Property(r => r.FechaReserva)
+                  .IsRequired();
+                  
             // Reserva → Usuario (N:1)
             entity.HasOne(r => r.Usuario)
                   .WithMany(u => u.Reservas)

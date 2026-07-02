@@ -7,7 +7,9 @@ public class Reserva
     [Key]
     public int Cod_Reserva { get; set; }
 
-    public DateTime Fecha { get; set; }
+    public DateTime Fecha { get; set; } // Fecha de creación de la reserva, la asigna el sistema automáticamente al crearla.
+    
+    public DateTime FechaReserva { get; set; } // fecha para la que se reserva, la manda el cliente
 
     public string Dni_Cliente { get; set; }
 
