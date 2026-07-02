@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FutbolyaAPIS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260702152616_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260702192924_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -67,6 +67,11 @@ public class MaterialDeportivoLogica : IMaterialDeportivoLogica
 
     public async Task<(MaterialDeportivoDto? resultado, string? error)> Actualizar(int id, MaterialDeportivoCreateDto dto)
     {
+        //validar que no exista otro material con el mismo nombre
+        var materiales = await _repo.ObtenerTodos();
+        if (materiales.Any(m => m.Nombre.Equals(dto.Nombre, StringComparison.OrdinalIgnoreCase) && m.Cod_Material != id))
+            return (null, "Ya existe un material con ese nombre");
+            
         var material = await _repo.ObtenerPorId(id);
         if (material == null)
             return (null, "NOT_FOUND");

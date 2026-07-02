@@ -187,13 +187,40 @@ public class ReservaLogica : IReservaLogica
         //Verificar que la cancha no esté ocupada en esa fecha y horario
         var reservasExistentes = await _repo.ObtenerTodos();
         var canchaOcupada = reservasExistentes.Any(r =>
-            r.Cod_Reserva       != id             &&
-            r.Cod_Cancha        == dto.Cod_Cancha &&
+            r.Cod_Reserva       != id              &&
+            r.Cod_Cancha        == dto.Cod_Cancha  &&
             r.Cod_Horario       == dto.Cod_Horario &&
             r.FechaReserva.Date == dto.FechaReserva.Date);
 
         if (canchaOcupada)
             return (null, "La cancha ya está reservada para ese horario y fecha");
+
+        // ── Validar stock de los NUEVOS materiales ANTES de tocar nada ──
+        // Agrupamos por si el mismo material aparece más de una vez en el detalle
+        var cantidadesPorMaterial = dto.Materiales
+            .GroupBy(m => m.Cod_Material)
+            .ToDictionary(g => g.Key, g => g.Sum(m => m.Cantidad));
+
+        // Stock que quedaría liberado de los materiales viejos, por material
+        var stockLiberadoPorMaterial = (reserva.ReservaMateriales ?? Enumerable.Empty<Reserva_Material>())
+            .GroupBy(rm => rm.Cod_Material)
+            .ToDictionary(g => g.Key, g => g.Sum(rm => rm.Cantidad));
+
+        foreach (var (codMaterial, cantidadNueva) in cantidadesPorMaterial)
+        {
+            var material = await _repoStock.ObtenerPorId(codMaterial);
+            if (material == null)
+                return (null, "NOT_FOUND");
+
+            // Stock disponible real = stock actual + lo que se liberaría de ESTA reserva para ese material
+            stockLiberadoPorMaterial.TryGetValue(codMaterial, out var liberado);
+            var stockDisponible = material.Cant_Material + liberado;
+
+            if (stockDisponible < cantidadNueva)
+                return (null, $"Stock insuficiente para el material '{material.Nombre}'. Disponible: {stockDisponible}");
+        }
+
+        // ── Recién ahora, con TODO validado, aplicamos los cambios ──
 
         // Liberar stock de materiales anteriores
         foreach (var rm in reserva.ReservaMateriales ?? Enumerable.Empty<Reserva_Material>())
@@ -205,17 +232,6 @@ public class ReservaLogica : IReservaLogica
                 await _repoStock.Actualizar(material);
             }
             await _repoMaterial.Eliminar(rm);
-        }
-
-        // 5. Verificar stock de nuevos materiales
-        foreach (var item in dto.Materiales)
-        {
-            var material = await _repoStock.ObtenerPorId(item.Cod_Material);
-            if (material == null)
-                return (null, "NOT_FOUND");
-
-            if (material.Cant_Material < item.Cantidad)
-                return (null, $"Stock insuficiente para el material '{material.Nombre}'. Disponible: {material.Cant_Material}");
         }
 
         // Actualizar datos de la reserva

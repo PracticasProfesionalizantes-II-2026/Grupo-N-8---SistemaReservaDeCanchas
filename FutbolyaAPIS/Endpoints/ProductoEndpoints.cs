@@ -69,15 +69,17 @@ public static class ProductoEndpoints
                 if (string.IsNullOrWhiteSpace(dto.Nombre) || string.IsNullOrWhiteSpace(dto.Tipo))
                     return Results.BadRequest(new { mensaje = "Nombre y Tipo son obligatorios" });
                 
+
                 var tiposValidos = new[] { "Bebida", "Comida" };
                 if (!tiposValidos.Contains(dto.Tipo, StringComparer.OrdinalIgnoreCase))
                     return Results.BadRequest(new { mensaje = "El tipo debe ser 'Bebida' o 'Comida'" });
                 
-                //intenta crear un nuevo producto utilizando la lógica de negocio.
-                var id = await logica.Crear(dto);
-                var creado = await logica.ObtenerPorId(id);
+                var (id, error) = await logica.Crear(dto);
+                if (id is null)
+                    return Results.Conflict(new { mensaje = error });
 
-                return Results.Created($"/api/productos/{id}", creado);
+                var producto = await logica.ObtenerPorId(id.Value);
+                return Results.Created($"/api/productos/{id}", producto);
             }
             catch (Exception ex)
             {

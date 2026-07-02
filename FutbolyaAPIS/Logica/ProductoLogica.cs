@@ -8,7 +8,7 @@ public interface IProductoLogica
 {
     Task<IEnumerable<ProductoDto>> ObtenerTodos();
     Task<ProductoDto?> ObtenerPorId(int id);
-    Task<int> Crear(ProductoCreateDto dto);
+    Task<(int? id, string? error)> Crear(ProductoCreateDto dto);
     Task<bool> Actualizar(int id, ProductoCreateDto dto);
     Task<bool> ActualizarStock(int id, int cantidad);
     Task<bool> Eliminar(int id);
@@ -51,17 +51,22 @@ public class ProductoLogica : IProductoLogica
         );
     }
 
-    public async Task<int> Crear(ProductoCreateDto dto)
+    public async Task<(int? id, string? error)> Crear(ProductoCreateDto dto)
     {
+        var productos = await _repo.ObtenerTodos();
+        if (productos.Any(p => p.Nombre.Equals(dto.Nombre, StringComparison.OrdinalIgnoreCase)))
+            return (null, "Ya existe un producto con ese nombre");
+
+    
         var producto = new Producto
         {
-            Nombre   = dto.Nombre,
+            Nombre   = dto.Nombre.Trim(),
             Cantidad = dto.Cantidad,
             Precio   = dto.Precio,
-            Tipo     = dto.Tipo
+            Tipo     = dto.Tipo.Trim()
         };
         await _repo.Agregar(producto);
-        return producto.Cod_Producto;
+        return (producto.Cod_Producto, null);
     }
 
     public async Task<bool> Actualizar(int id, ProductoCreateDto dto)
@@ -69,10 +74,10 @@ public class ProductoLogica : IProductoLogica
         var producto = await _repo.ObtenerPorId(id);
         if (producto == null) return false;
 
-        producto.Nombre   = dto.Nombre;
+        producto.Nombre   = dto.Nombre.Trim();
         producto.Cantidad = dto.Cantidad;
         producto.Precio   = dto.Precio;
-        producto.Tipo     = dto.Tipo;
+        producto.Tipo     = dto.Tipo.Trim();
 
         await _repo.Actualizar(producto);
         return true;

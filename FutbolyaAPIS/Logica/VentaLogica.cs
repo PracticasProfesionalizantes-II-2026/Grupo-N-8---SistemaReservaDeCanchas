@@ -63,15 +63,20 @@ public class VentaLogica : IVentaLogica
 
     public async Task<(VentaDto? resultado, string? error)> Crear(VentaCreateDto dto)
     {
-        // Verificar stock de cada producto antes de crear
-        foreach (var item in dto.Detalle)
-        {
-            var producto = await _repoProducto.ObtenerPorId(item.Cod_Producto);
-            if (producto == null)
-                return (null, $"NOT_FOUND: Producto con id {item.Cod_Producto} no encontrado");
+        //agrupamos los productos por su código para evitar duplicados y sumamos las cantidades
+        var productosAgrupados = dto.Detalle
+            .GroupBy(d => d.Cod_Producto)
+            .ToDictionary(g => g.Key, g => g.Sum(d => d.Cantidad));
 
-            if (producto.Cantidad < item.Cantidad)
-                return (null, $"Stock insuficiente para '{producto.Nombre}'. Disponible: {producto.Cantidad}");
+        //verificamos stock con los productos agrupados
+        foreach (var (cod_Producto, cantidadTotal) in productosAgrupados)
+        {
+            var producto = await _repoProducto.ObtenerPorId(cod_Producto);
+            if (producto == null)
+                return (null, $"NOT_FOUND: Producto con id {cod_Producto} no encontrado");
+
+            if (producto.Cantidad < cantidadTotal)
+                return (null, $"INSUFFICIENT_STOCK: Producto {producto.Nombre} tiene stock insuficiente. Disponible: {producto.Cantidad}, requerido: {cantidadTotal}");
         }
 
         // Fecha y hora las asigna el servidor
@@ -88,26 +93,28 @@ public class VentaLogica : IVentaLogica
         decimal montoTotal = 0;
 
         // Crear detalle, descontar stock y calcular totales
-        foreach (var item in dto.Detalle)
+        foreach (var (cod_Producto, cantidadTotal) in productosAgrupados)
         {
-            var producto = await _repoProducto.ObtenerPorId(item.Cod_Producto);
+            var producto = await _repoProducto.ObtenerPorId(cod_Producto);
+            if (producto == null)
+                return (null, $"NOT_FOUND: Producto con id {cod_Producto} no encontrado");
 
-            var subtotal = producto!.Precio * item.Cantidad;
-            montoTotal  += subtotal;
+            var subTotal = producto.Precio * cantidadTotal;
+            montoTotal += subTotal;
 
             var detalle = new VentaDetallada
             {
-                Cod_Venta    = venta.Cod_Venta,
-                Cod_Producto = item.Cod_Producto,
-                Cantidad     = item.Cantidad,
-                Precio       = producto.Precio,
-                SubTotal     = subtotal
+                Cod_Venta   = venta.Cod_Venta,
+                Cod_Producto= cod_Producto,
+                Cantidad    = cantidadTotal,
+                Precio      = producto.Precio,
+                SubTotal    = subTotal
             };
 
             await _repoDetalle.Agregar(detalle);
 
-            // Descontar stock
-            producto.Cantidad -= item.Cantidad;
+            // Descontar stock del producto
+            producto.Cantidad -= cantidadTotal;
             await _repoProducto.Actualizar(producto);
         }
 
