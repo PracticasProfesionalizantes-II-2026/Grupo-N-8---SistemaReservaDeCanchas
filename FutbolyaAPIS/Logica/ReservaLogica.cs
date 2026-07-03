@@ -89,14 +89,14 @@ public class ReservaLogica : IReservaLogica
         //Verificar que la cancha exista y esté disponible
         var cancha = await _repoCancha.ObtenerPorId(dto.Cod_Cancha);
         if (cancha == null)
-            return (null, "NOT_FOUND");
+            return (null, "Cancha no encontrada");
         if (!cancha.Estado)
             return (null, "La cancha no está disponible actualmente");
 
         //Verificar que el horario exista y esté activo
         var horario = await _repoHorario.ObtenerPorId(dto.Cod_Horario);
         if (horario == null)
-            return (null, "NOT_FOUND");
+            return (null, "Horario no encontrado");
         if (!horario.Activo)
             return (null, "El horario seleccionado no está activo");
 
@@ -113,16 +113,21 @@ public class ReservaLogica : IReservaLogica
         //Verificar que el usuario exista
         var usuario = await _repoUsuario.ObtenerPorId(dto.Cod_Usuario);
         if (usuario == null)
-            return (null, "NOT_FOUND");
+            return (null, "Usuario no encontrado");
+
+        // ── Agrupar materiales por id (por si el mismo material aparece más de una vez)
+        var cantidadesPorMaterial = dto.Materiales
+            .GroupBy(m => m.Cod_Material)
+            .ToDictionary(g => g.Key, g => g.Sum(m => m.Cantidad));
 
         //Verificar stock disponible antes de crear
-        foreach (var item in dto.Materiales)
+        foreach (var (codMaterial, cantidadTotal) in cantidadesPorMaterial)
         {
-            var material = await _repoStock.ObtenerPorId(item.Cod_Material);
+            var material = await _repoStock.ObtenerPorId(codMaterial);
             if (material == null)
-                return (null, "NOT_FOUND");
+                return (null, $"Material con id {codMaterial} no encontrado");
 
-            if (material.Cant_Material < item.Cantidad)
+            if (material.Cant_Material < cantidadTotal)
                 return (null, $"Stock insuficiente para el material '{material.Nombre}'. Disponible: {material.Cant_Material}");
         }
 
@@ -140,18 +145,18 @@ public class ReservaLogica : IReservaLogica
 
         await _repo.Agregar(reserva);
 
-        // Descontar stock y crear los materiales de la reserva
-        foreach (var item in dto.Materiales)
+        // Descontar stock (agrupado) y crear los materiales de la reserva
+        foreach (var (codMaterial, cantidadTotal) in cantidadesPorMaterial)
         {
-            var material = await _repoStock.ObtenerPorId(item.Cod_Material);
-            material!.Cant_Material -= item.Cantidad;
+            var material = await _repoStock.ObtenerPorId(codMaterial);
+            material!.Cant_Material -= cantidadTotal;
             await _repoStock.Actualizar(material);
 
             var rm = new Reserva_Material
             {
                 Cod_Reserva  = reserva.Cod_Reserva,
-                Cod_Material = item.Cod_Material,
-                Cantidad     = item.Cantidad
+                Cod_Material = codMaterial,
+                Cantidad     = cantidadTotal
             };
             await _repoMaterial.Agregar(rm);
         }
@@ -164,7 +169,7 @@ public class ReservaLogica : IReservaLogica
     {
         var reserva = await _repo.ObtenerPorId(id);
         if (reserva == null)
-            return (null, "NOT_FOUND");
+            return (null, "Reserva no encontrada");
 
         //Verificar que la fecha de reserva no sea en el pasado
         if (dto.FechaReserva.Date < DateTime.Today)
@@ -173,14 +178,14 @@ public class ReservaLogica : IReservaLogica
         //Verificar que la cancha exista y esté disponible
         var cancha = await _repoCancha.ObtenerPorId(dto.Cod_Cancha);
         if (cancha == null)
-            return (null, "NOT_FOUND");
+            return (null, "Cancha no encontrada");
         if (!cancha.Estado)
             return (null, "La cancha no está disponible actualmente");
 
         //Verificar que el horario exista y esté activo
         var horario = await _repoHorario.ObtenerPorId(dto.Cod_Horario);
         if (horario == null)
-            return (null, "NOT_FOUND");
+            return (null, "Horario no encontrado");
         if (!horario.Activo)
             return (null, "El horario seleccionado no está activo");
 
@@ -210,7 +215,7 @@ public class ReservaLogica : IReservaLogica
         {
             var material = await _repoStock.ObtenerPorId(codMaterial);
             if (material == null)
-                return (null, "NOT_FOUND");
+                return (null, $"Material con id {codMaterial} no encontrado");
 
             // Stock disponible real = stock actual + lo que se liberaría de ESTA reserva para ese material
             stockLiberadoPorMaterial.TryGetValue(codMaterial, out var liberado);
@@ -244,18 +249,18 @@ public class ReservaLogica : IReservaLogica
 
         await _repo.Actualizar(reserva);
 
-        // Descontar stock y crear nuevos materiales
-        foreach (var item in dto.Materiales)
+        // Descontar stock (agrupado) y crear nuevos materiales
+        foreach (var (codMaterial, cantidadTotal) in cantidadesPorMaterial)
         {
-            var material = await _repoStock.ObtenerPorId(item.Cod_Material);
-            material!.Cant_Material -= item.Cantidad;
+            var material = await _repoStock.ObtenerPorId(codMaterial);
+            material!.Cant_Material -= cantidadTotal;
             await _repoStock.Actualizar(material);
 
             var rm = new Reserva_Material
             {
                 Cod_Reserva  = reserva.Cod_Reserva,
-                Cod_Material = item.Cod_Material,
-                Cantidad     = item.Cantidad
+                Cod_Material = codMaterial,
+                Cantidad     = cantidadTotal
             };
             await _repoMaterial.Agregar(rm);
         }
@@ -301,11 +306,11 @@ public class ReservaLogica : IReservaLogica
     {
         var reserva = await _repo.ObtenerPorId(idReserva);
         if (reserva == null)
-            return (null, "NOT_FOUND");
+            return (null, "Reserva no encontrada");
 
         var material = await _repoStock.ObtenerPorId(dto.Cod_Material);
         if (material == null)
-            return (null, "NOT_FOUND");
+            return (null, "Material no encontrado");
 
         if (material.Cant_Material < dto.Cantidad)
             return (null, $"Stock insuficiente para '{material.Nombre}'. Disponible: {material.Cant_Material}");
@@ -313,41 +318,56 @@ public class ReservaLogica : IReservaLogica
         material.Cant_Material -= dto.Cantidad;
         await _repoStock.Actualizar(material);
 
-        var rm = new Reserva_Material
+        var rmExistente = reserva.ReservaMateriales?.FirstOrDefault(r => r.Cod_Material == dto.Cod_Material);
+        if (rmExistente != null)
         {
-            Cod_Reserva  = idReserva,
-            Cod_Material = dto.Cod_Material,
-            Cantidad     = dto.Cantidad
-        };
-        await _repoMaterial.Agregar(rm);
+            rmExistente.Cantidad += dto.Cantidad;
+            await _repoMaterial.Actualizar(rmExistente);
 
-        return (new ReservaMaterialDto(
-            rm.Cod_Reserva_Mat,
-            rm.Cod_Reserva,
-            rm.Cod_Material,
-            material.Nombre,
-            rm.Cantidad
-        ), null);
+            return (new ReservaMaterialDto(
+                rmExistente.Cod_Reserva_Mat,
+                rmExistente.Cod_Reserva,
+                rmExistente.Cod_Material,
+                material.Nombre,
+                rmExistente.Cantidad
+            ), null);
+        }
+        else
+        {
+            var rm = new Reserva_Material
+            {
+                Cod_Reserva  = idReserva,       
+                Cod_Material = dto.Cod_Material,
+                Cantidad     = dto.Cantidad
+            };
+            await _repoMaterial.Agregar(rm);
+
+            return (new ReservaMaterialDto(
+                rm.Cod_Reserva_Mat,
+                rm.Cod_Reserva,
+                rm.Cod_Material,
+                material.Nombre,
+                rm.Cantidad
+            ), null);
+        }
     }
 
-    public async Task<(bool eliminado, string? error)> QuitarMaterial(int idReserva, int idReservaMat)
+    public async Task<(bool eliminado, string? error)> QuitarMaterial(int idReserva, int idMaterial)
     {
         var reserva = await _repo.ObtenerPorId(idReserva);
         if (reserva == null)
-            return (false, "NOT_FOUND");
+            return (false, "Reserva no encontrada");
 
-        var rm = await _repoMaterial.ObtenerPorId(idReservaMat);
+        var material = await _repoStock.ObtenerPorId(idMaterial);
+        if (material == null)
+            return (false, "Material no encontrado");
+        
+        var rm = reserva.ReservaMateriales?.FirstOrDefault(r => r.Cod_Material == idMaterial);
         if (rm == null)
-            return (false, "NOT_FOUND");
+            return (false, "Este material no está asociado a esta reserva");
 
-        // Liberar stock al quitar el material
-        var material = await _repoStock.ObtenerPorId(rm.Cod_Material);
-        if (material != null)
-        {
-            material.Cant_Material += rm.Cantidad;
-            await _repoStock.Actualizar(material);
-        }
-
+        material.Cant_Material += rm.Cantidad;
+        await _repoStock.Actualizar(material);
         await _repoMaterial.Eliminar(rm);
         return (true, null);
     }

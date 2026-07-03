@@ -157,11 +157,11 @@ public static class ReservaEndpoints
                 var (eliminado, error) = await logica.QuitarMaterial(id, mat_id);
 
                 if (!eliminado)
-                    return error == "NOT_FOUND"
-                        ? Results.NotFound(new { mensaje = "Reserva o material no encontrado" })
-                        : Results.Problem(error);
+                    return error == "Reserva no encontrada"
+                        ? Results.NotFound(new { mensaje = error, cod_reserva = id })
+                        : Results.BadRequest(new { mensaje = error});
 
-                return Results.Ok(new { mensaje = "Material eliminado de la reserva correctamente", cod_reserva_mat = mat_id });
+                return Results.Ok(new { mensaje = "Material eliminado de la reserva correctamente", cod_reserva = id, cod_material = mat_id });
             }
             catch (Exception ex)
             {
