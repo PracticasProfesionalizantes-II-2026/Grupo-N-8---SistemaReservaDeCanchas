@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\leona\\OneDrive\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {}
+    "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\leona\\OneDrive\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {
+    "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\leona\\OneDrive\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
         "projectName": "FutbolyaAPIS",
-        "projectPath": "C:\\Users\\leona\\OneDrive\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
-        "packagesPath": "C:\\Users\\leona\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\leona\\OneDrive\\Desktop\\FutbolyaAPIS\\obj\\",
+        "projectPath": "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Usuario\\Desktop\\FutbolyaAPIS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\leona\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

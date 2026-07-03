@@ -71,6 +71,11 @@ public class ProductoLogica : IProductoLogica
 
     public async Task<bool> Actualizar(int id, ProductoCreateDto dto)
     {
+        //verifica si existe otro producto con el mismo nombre
+        var productos = await _repo.ObtenerTodos();
+        if (productos.Any(p => p.Nombre.Equals(dto.Nombre, StringComparison.OrdinalIgnoreCase) && p.Cod_Producto != id))
+            return false;
+            
         var producto = await _repo.ObtenerPorId(id);
         if (producto == null) return false;
 
