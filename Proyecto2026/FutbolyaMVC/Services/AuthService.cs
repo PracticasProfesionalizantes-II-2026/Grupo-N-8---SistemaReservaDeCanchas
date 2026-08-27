@@ -18,8 +18,9 @@ public class AuthService : IAuthService
         try
         {
             // Enviamos la petición POST a la API
+            
             var response = await _httpClient.PostAsJsonAsync(
-                $"{_apiBaseUrl}/api/auth/login", 
+                $"{_apiBaseUrl}/api/usuarios/api/auth/login", 
                 request
             );
 
