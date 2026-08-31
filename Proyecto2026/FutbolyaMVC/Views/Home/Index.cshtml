@@ -1,8 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
+    var rol = Context.Session.GetInt32("Rol");
+    var nombre = Context.Session.GetString("Nombre");
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="panel">
+    <h1>Bienvenido, @nombre</h1>
+    <p>@(rol == 1 ? "Estás logueado como Administrador" : "Estás logueado como Operador")</p>
 </div>

@@ -43,4 +43,14 @@ public class AccountController : Controller
         // Redirigimos al dashboard/menú
         return RedirectToAction("Index", "Home");
     }
+    // GET: /Account/Logout
+    // Cierra la sesión del usuario
+    public IActionResult Logout()
+    {
+        // Limpiamos la sesión
+        HttpContext.Session.Clear();
+
+        // Redirigimos al login
+        return RedirectToAction("Login");
+    }
 }

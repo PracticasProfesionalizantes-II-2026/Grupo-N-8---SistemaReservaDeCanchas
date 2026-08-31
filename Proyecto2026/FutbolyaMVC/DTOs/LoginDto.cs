@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace FutbolyaMVC.DTOs;
 
 public record LoginRequest(
@@ -6,8 +8,8 @@ public record LoginRequest(
 );
 
 public record LoginResponse(
-    int Cod_Usuario,
-    string Nombre,
-    bool Rol,
-    bool Cambiar_Contraseña
+    [property: JsonPropertyName("cod_Usuario")] int Cod_Usuario,
+    [property: JsonPropertyName("nombre")] string Nombre,
+    [property: JsonPropertyName("rol")] bool Rol,
+    [property: JsonPropertyName("cambiar_Contraseña")] bool Cambiar_Contraseña
 );

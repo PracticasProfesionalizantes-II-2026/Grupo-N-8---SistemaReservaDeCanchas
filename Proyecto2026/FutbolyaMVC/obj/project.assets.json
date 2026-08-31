@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026\\FutbolyaMVC\\FutbolyaMVC.csproj",
+      "projectUniqueName": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaMVC\\FutbolyaMVC.csproj",
       "projectName": "FutbolyaMVC",
-      "projectPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026\\FutbolyaMVC\\FutbolyaMVC.csproj",
+      "projectPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaMVC\\FutbolyaMVC.csproj",
       "packagesPath": "C:\\Users\\leona\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026\\FutbolyaMVC\\obj\\",
+      "outputPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaMVC\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

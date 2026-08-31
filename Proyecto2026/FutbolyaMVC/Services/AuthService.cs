@@ -17,26 +17,30 @@ public class AuthService : IAuthService
     {
         try
         {
-            // Enviamos la petición POST a la API
-            
             var response = await _httpClient.PostAsJsonAsync(
-                $"{_apiBaseUrl}/api/usuarios/api/auth/login", 
+                $"{_apiBaseUrl}/api/usuarios/api/auth/login",
                 request
             );
 
-            // Si la petición fue exitosa, deserializamos la respuesta
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<LoginResponse>(content);
+
+                using var jsonDoc = System.Text.Json.JsonDocument.Parse(content);
+                var root = jsonDoc.RootElement;
+
+                var codUsuario = root.GetProperty("cod_Usuario").GetInt32();
+                var nombre = root.GetProperty("nombre").GetString() ?? "Usuario";
+                var rol = root.GetProperty("rol").GetBoolean();
+                var cambiarContraseña = root.GetProperty("cambiar_Contraseña").GetBoolean();
+
+                return new LoginResponse(codUsuario, nombre, rol, cambiarContraseña);
             }
 
-            // Si falla, devolvemos null
             return null;
         }
         catch (Exception ex)
         {
-            // Si hay error de conexión, lo registramos y devolvemos null
             Console.WriteLine($"Error en login: {ex.Message}");
             return null;
         }

@@ -1,24 +1,26 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using FutbolyaMVC.Models;
 
 namespace FutbolyaMVC.Controllers;
 
 public class HomeController : Controller
 {
+    // GET: /Home/Index
+    // Dashboard - Menú principal después del login
     public IActionResult Index()
     {
-        return View();
-    }
+        // Verificamos si el usuario está logueado
+        var codUsuario = HttpContext.Session.GetInt32("Cod_Usuario");
+        if (codUsuario == null)
+        {
+            // Si no está logueado, lo redirige al login
+            return RedirectToAction("Login", "Account");
+        }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        // Pasamos el Rol a la vista para que muestre el menú correcto
+        var rol = HttpContext.Session.GetInt32("Rol");
+        ViewData["Rol"] = rol;
+        ViewData["Nombre"] = HttpContext.Session.GetString("Nombre");
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View();
     }
 }

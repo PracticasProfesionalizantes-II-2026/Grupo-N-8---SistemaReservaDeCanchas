@@ -1,50 +1,109 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    // Averiguamos en qué controlador estamos parados, para marcar el botón activo del menú
+    var controladorActual = ViewContext.RouteData.Values["Controller"]?.ToString();
+
+    // Datos del usuario logueado (guardados en la sesión al hacer login)
+    var rol = Context.Session.GetInt32("Rol");
+    var nombre = Context.Session.GetString("Nombre");
+}
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FutbolyaMVC</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FutbolyaMVC.styles.css" asp-append-version="true" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true">
+    <title>@ViewData["Title"] - Fútbol Ya</title>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FutbolyaMVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <div class="app">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - FutbolyaMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+
+            <div class="sidebar__brand">
+                <img class="sidebar__brand-logo" src="~/images/futbolya-logo.png" alt="Fútbol Ya">
+            </div>
+
+            <nav class="sidebar__nav">
+                <ul class="menu">
+
+                    <li class="menu__item">
+                        <a class="menu__button" href="#">
+                            <img class="menu__icon-img" src="~/images/icons/reservas.png" alt="">
+                            <span class="menu__label">Reservas</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button" href="#">
+                            <img class="menu__icon-img" src="~/images/icons/inventario.png" alt="">
+                            <span class="menu__label">Inventario</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button @(controladorActual == "Cancha" ? "is-active" : "")"
+                           asp-controller="Cancha" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/icons/canchas.png" alt="">
+                            <span class="menu__label">Canchas</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button" href="#">
+                            <img class="menu__icon-img" src="~/images/icons/productos.png" alt="">
+                            <span class="menu__label">Productos</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button" href="#">
+                            <img class="menu__icon-img" src="~/images/icons/ventas.png" alt="">
+                            <span class="menu__label">Ventas</span>
+                        </a>
+                    </li>
+
+                    @if (rol == 1)
+                    {
+                        <li class="menu__item">
+                            <a class="menu__button" href="#">
+                                <img class="menu__icon-img" src="~/images/icons/estadisticas.png" alt="">
+                                <span class="menu__label">Estadísticas</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__item">
+                            <a class="menu__button" href="#">
+                                <img class="menu__icon-img" src="~/images/icons/usuarios.png" alt="">
+                                <span class="menu__label">Usuarios</span>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </nav>
+
+            <img class="sidebar__watermark" src="~/images/marca-agua.png" alt="">
+        </aside>
+
+        <!-- Contenido de cada módulo -->
+        <div class="content">
+
+            <header class="topbar">
+                <a class="topbar__logout" href="@Url.Action("Logout", "Account")">
+                    <img class="topbar__logout-icon" src="~/images/icons/salir.png" alt="">
+                    <span>Cerrar Sesión</span>
+                </a>
+            </header>
+
+            <main class="stage">
+                @RenderBody()
+            </main>
+
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    </div>
 </body>
 </html>
