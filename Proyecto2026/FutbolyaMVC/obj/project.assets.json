@@ -8,23 +8,23 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\leona\\.nuget\\packages\\": {},
+    "C:\\Users\\Maxi\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaMVC\\FutbolyaMVC.csproj",
+      "projectUniqueName": "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaMVC\\FutbolyaMVC.csproj",
       "projectName": "FutbolyaMVC",
-      "projectPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaMVC\\FutbolyaMVC.csproj",
-      "packagesPath": "C:\\Users\\leona\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaMVC\\obj\\",
+      "projectPath": "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaMVC\\FutbolyaMVC.csproj",
+      "packagesPath": "C:\\Users\\Maxi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaMVC\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\leona\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Maxi\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -77,7 +77,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

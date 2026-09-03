@@ -3,7 +3,7 @@
    ========================================================= */
 
 :root {
-    --bg-app: #000000;
+    
     --sidebar-bg: #2f373b;
     --topbar-bg: #2f373b;
     --item-bg: #37404a;
@@ -32,6 +32,7 @@ html, body {
 }
 
 body {
+    background: url('@Url.Content("~/images/fondo-login.png")') no-repeat center center fixed;
     font-size: 14px;
     background: var(--bg-app);
     font-family: var(--font-body);
@@ -72,8 +73,8 @@ body {
 }
 
 .sidebar__brand-logo {
-    width: 34px;
-    height: 34px;
+    width: 100px;
+    height: 150px;
     object-fit: contain;
 }
 
@@ -130,8 +131,8 @@ body {
 
 /* Ícono de cada botón: reemplazá estas imágenes por las tuyas en wwwroot/images/icons/ */
 .menu__icon-img {
-    width: 22px;
-    height: 22px;
+    width: 25px;
+    height: 25px;
     object-fit: contain;
     flex-shrink: 0;
 }
@@ -147,7 +148,7 @@ body {
     position: absolute;
     left: -10%;
     bottom: 0;
-    width: 65%;
+    width: 30;
     max-width: 260px;
     opacity: 0.16;
     pointer-events: none;
@@ -203,10 +204,14 @@ body {
 .stage {
     flex: 1;
     padding: 32px;
-    background-image: url('../images/cancha-fondo.jpg');
+    background-image: url('../images/cancha-fondo.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    overflow-y: auto;
+    /* Permite hacer scroll con la rueda del mouse sin mostrar la barra */
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* Edge / IE viejo */
 }
 
 /* Tarjeta blanca genérica: la va a usar cada módulo (Canchas, Home, etc.) */

@@ -1,0 +1,9 @@
+/* =========================================================
+   FÚTBOL YA — Módulo Inventario (Materiales Deportivos)
+   Reutiliza los estilos base de productos.css (tarjetas, modales,
+   toolbar, toast, botones) y solo agrega lo específico de Inventario.
+   ========================================================= */
+
+.producto-card__tipo--material {
+    background: #e8f5e9;
+}

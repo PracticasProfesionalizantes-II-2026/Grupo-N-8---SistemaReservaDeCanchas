@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ICanchaService, CanchaService>();
+builder.Services.AddHttpClient<IProductoService, ProductoService>();
+builder.Services.AddHttpClient<IMaterialService, MaterialService>();
+builder.Services.AddHttpClient<IVentaService, VentaService>();
 builder.Services.AddSession();
 
 var app = builder.Build();

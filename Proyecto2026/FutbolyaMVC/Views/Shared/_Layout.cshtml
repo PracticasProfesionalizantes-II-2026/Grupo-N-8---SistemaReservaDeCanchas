@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true">
+    @await RenderSectionAsync("Styles", required: false)
     <title>@ViewData["Title"] - Fútbol Ya</title>
 </head>
 <body>
@@ -31,14 +32,15 @@
 
                     <li class="menu__item">
                         <a class="menu__button" href="#">
-                            <img class="menu__icon-img" src="~/images/icons/reservas.png" alt="">
+                            <img class="menu__icon-img" src="~/images/reservas.png" alt="">
                             <span class="menu__label">Reservas</span>
                         </a>
                     </li>
 
                     <li class="menu__item">
-                        <a class="menu__button" href="#">
-                            <img class="menu__icon-img" src="~/images/icons/inventario.png" alt="">
+                        <a class="menu__button @(controladorActual == "Material" ? "is-active" : "")"
+                           asp-controller="Material" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/inventario.png" alt="">
                             <span class="menu__label">Inventario</span>
                         </a>
                     </li>
@@ -46,21 +48,23 @@
                     <li class="menu__item">
                         <a class="menu__button @(controladorActual == "Cancha" ? "is-active" : "")"
                            asp-controller="Cancha" asp-action="Index">
-                            <img class="menu__icon-img" src="~/images/icons/canchas.png" alt="">
+                            <img class="menu__icon-img" src="~/images/canchas.png" alt="">
                             <span class="menu__label">Canchas</span>
                         </a>
                     </li>
 
                     <li class="menu__item">
-                        <a class="menu__button" href="#">
-                            <img class="menu__icon-img" src="~/images/icons/productos.png" alt="">
+                        <a class="menu__button @(controladorActual == "Producto" ? "is-active" : "")"
+                           asp-controller="Producto" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/productos.png" alt="">
                             <span class="menu__label">Productos</span>
                         </a>
                     </li>
 
                     <li class="menu__item">
-                        <a class="menu__button" href="#">
-                            <img class="menu__icon-img" src="~/images/icons/ventas.png" alt="">
+                        <a class="menu__button @(controladorActual == "Venta" ? "is-active" : "")"
+                           asp-controller="Venta" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/ventas.png" alt="">
                             <span class="menu__label">Ventas</span>
                         </a>
                     </li>
@@ -69,14 +73,14 @@
                     {
                         <li class="menu__item">
                             <a class="menu__button" href="#">
-                                <img class="menu__icon-img" src="~/images/icons/estadisticas.png" alt="">
+                                <img class="menu__icon-img" src="~/images/estadisticas.png" alt="">
                                 <span class="menu__label">Estadísticas</span>
                             </a>
                         </li>
 
                         <li class="menu__item">
                             <a class="menu__button" href="#">
-                                <img class="menu__icon-img" src="~/images/icons/usuarios.png" alt="">
+                                <img class="menu__icon-img" src="~/images/usuarios.png" alt="">
                                 <span class="menu__label">Usuarios</span>
                             </a>
                         </li>
@@ -93,7 +97,7 @@
 
             <header class="topbar">
                 <a class="topbar__logout" href="@Url.Action("Logout", "Account")">
-                    <img class="topbar__logout-icon" src="~/images/icons/salir.png" alt="">
+                    <img class="topbar__logout-icon" src="~/images/salir.png" alt="">
                     <span>Cerrar Sesión</span>
                 </a>
             </header>

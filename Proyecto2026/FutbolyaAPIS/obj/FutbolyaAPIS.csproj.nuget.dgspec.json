@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {}
+    "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {
+    "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+        "projectUniqueName": "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
         "projectName": "FutbolyaAPIS",
-        "projectPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
-        "packagesPath": "C:\\Users\\leona\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\leona\\OneDrive\\Desktop\\Proyecto2026 - copia\\FutbolyaAPIS\\obj\\",
+        "projectPath": "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaAPIS\\FutbolyaAPIS.csproj",
+        "packagesPath": "C:\\Users\\Maxi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Maxi\\Desktop\\Proyecto2026 - actualizado\\Proyecto2026 - copia\\FutbolyaAPIS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\leona\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Maxi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -90,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

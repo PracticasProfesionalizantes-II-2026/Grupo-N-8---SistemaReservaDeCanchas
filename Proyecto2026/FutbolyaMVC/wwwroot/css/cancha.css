@@ -1,0 +1,413 @@
+/* =========================================================
+   FÚTBOL YA — Módulo Canchas
+   ========================================================= */
+
+.canchas-panel {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px 36px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    max-height: 720px;
+}
+
+.canchas-panel__title {
+    font-family: var(--font-display);
+    color: #2f373b;
+    font-size: 26px;
+    text-align: center;
+    margin: 0 0 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+/* ---------- Barra de búsqueda y filtro ---------- */
+
+.canchas-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.canchas-search {
+    flex: 1;
+    position: relative;
+}
+
+.canchas-search svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    stroke: #8a8a8a;
+    pointer-events: none;
+}
+
+.canchas-search input {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    background: #f7f7f7;
+}
+
+.canchas-search input:focus {
+    outline: none;
+    border-color: #3f6b4a;
+    background: #fff;
+}
+
+.canchas-filter {
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f7f7f7;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #444;
+    cursor: pointer;
+}
+
+.canchas-filter:focus {
+    outline: none;
+    border-color: #3f6b4a;
+}
+
+/* ---------- Lista (panel fijo, scroll interno) ---------- */
+
+.canchas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #b9d6c0 #f5f5f5;
+}
+
+.canchas-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.canchas-list::-webkit-scrollbar-thumb {
+    background: #b9d6c0;
+    border-radius: 3px;
+}
+
+.cancha-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border: 1px solid #ececec;
+    border-radius: 10px;
+    background: #fafafa;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.cancha-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #dcdcdc;
+}
+
+.cancha-card__icono {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: #e9f4ec;
+}
+
+.cancha-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cancha-card__nombre {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: #2f373b;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cancha-card__descripcion {
+    margin-top: 3px;
+    font-size: 12.5px;
+    color: #777;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cancha-card__estado {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.cancha-card__estado--disponible {
+    background: #e4f4e8;
+    color: #3f6b4a;
+}
+
+.cancha-card__estado--mantenimiento {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+.cancha-card__acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-editar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.btn-editar:hover {
+    background: #f0f0f0;
+}
+
+.btn-eliminar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #d64545;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.15s ease;
+}
+
+.btn-eliminar:hover {
+    background: #fdeaea;
+}
+
+.canchas-vacio {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    padding: 30px 0;
+}
+
+/* ---------- Botón añadir ---------- */
+
+.btn-anadir {
+    display: block;
+    margin-left: auto;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #3f6b4a;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.btn-anadir:hover {
+    background: #497a55;
+}
+
+/* ---------- Modales (mismo look que en Productos) ---------- */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+.modal-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px 30px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    animation: modal-in 0.15s ease-out;
+}
+
+@keyframes modal-in {
+    from {
+        transform: translateY(-12px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-box h2 {
+    font-family: var(--font-display);
+    color: #2f373b;
+    font-size: 20px;
+    margin: 0 0 18px;
+    text-align: center;
+}
+
+.modal-box .form-group {
+    margin-bottom: 14px;
+}
+
+.modal-box label {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.modal-box input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-family: var(--font-body);
+    font-size: 14px;
+}
+
+.modal-box input:focus {
+    outline: none;
+    border-color: #3f6b4a;
+}
+
+.modal-box .modal-error {
+    color: #c0392b;
+    font-size: 13px;
+    margin: -6px 0 12px;
+    min-height: 16px;
+}
+
+.modal-box .modal-mensaje {
+    text-align: center;
+    color: #444;
+    font-size: 14.5px;
+    margin-bottom: 22px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 7px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-cancelar {
+    background: #eee;
+    color: #444;
+}
+
+.btn-cancelar:hover {
+    background: #e2e2e2;
+}
+
+.btn-guardar {
+    background: #3f6b4a;
+    color: #fff;
+}
+
+.btn-guardar:hover {
+    background: #497a55;
+}
+
+.btn-confirmar-baja {
+    background: #d64545;
+    color: #fff;
+}
+
+.btn-confirmar-baja:hover {
+    background: #c23a3a;
+}
+
+/* ---------- Toast ---------- */
+
+.toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #2f373b;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 60;
+}
+
+.toast.toast--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.toast--error {
+    background: #c0392b;
+}
+
+@media (max-width: 640px) {
+    .canchas-panel {
+        padding: 22px 18px;
+    }
+}
