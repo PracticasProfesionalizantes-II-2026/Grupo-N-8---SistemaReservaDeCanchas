@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="FutbolYaAPI/FutbolYaAPI.csproj" />
+  <Project Path="FutbolYaMVC/FutbolYaMVC.csproj" />
+</Solution>

@@ -1,0 +1,129 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    // Averiguamos en qué controlador estamos parados, para marcar el botón activo del menú
+    var controladorActual = ViewContext.RouteData.Values["Controller"]?.ToString();
+
+    // Datos del usuario logueado (guardados en la sesión al hacer login)
+    var rol = Context.Session.GetInt32("Rol");
+    var nombre = Context.Session.GetString("Nombre");
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Token antiforgery expuesto una sola vez acá; wwwroot/js/http.js lo lee
+         de este meta para mandarlo en el header RequestVerificationToken de cada fetch. -->
+    <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken">
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true">
+    @await RenderSectionAsync("Styles", required: false)
+    <script src="~/js/http.js" asp-append-version="true"></script>
+    <title>@ViewData["Title"] - Fútbol Ya</title>
+</head>
+<body>
+    <div class="app">
+
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+
+            <div class="sidebar__brand">
+                <img class="sidebar__brand-logo" src="~/images/futbolya-logo.png" alt="Fútbol Ya">
+            </div>
+
+            @* Menú lateral: Estadísticas y Usuarios solo se muestran para Rol == 1 (Administrador);
+               el resto de los módulos son visibles para cualquier usuario logueado. *@
+            <nav class="sidebar__nav">
+                <ul class="menu">
+
+                    <li class="menu__item">
+                        <a class="menu__button @(controladorActual == "Reserva" ? "is-active" : "")"
+                           asp-controller="Reserva" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/reservas.png" alt="">
+                            <span class="menu__label">Reservas</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button @(controladorActual == "Material" ? "is-active" : "")"
+                           asp-controller="Material" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/inventario.png" alt="">
+                            <span class="menu__label">Inventario</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button @(controladorActual == "Cancha" ? "is-active" : "")"
+                           asp-controller="Cancha" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/canchas.png" alt="">
+                            <span class="menu__label">Canchas</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button @(controladorActual == "Producto" ? "is-active" : "")"
+                           asp-controller="Producto" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/productos.png" alt="">
+                            <span class="menu__label">Productos</span>
+                        </a>
+                    </li>
+
+                    <li class="menu__item">
+                        <a class="menu__button @(controladorActual == "Venta" ? "is-active" : "")"
+                           asp-controller="Venta" asp-action="Index">
+                            <img class="menu__icon-img" src="~/images/ventas.png" alt="">
+                            <span class="menu__label">Ventas</span>
+                        </a>
+                    </li>
+
+                    @if (rol == 1)
+                    {
+                        <li class="menu__item">
+                            <a class="menu__button @(controladorActual == "Estadistica" ? "is-active" : "")"
+                               asp-controller="Estadistica" asp-action="Index">
+                                <img class="menu__icon-img" src="~/images/estadisticas.png" alt="">
+                                <span class="menu__label">Estadísticas</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__item">
+                            <a class="menu__button @(controladorActual == "Usuario" ? "is-active" : "")"
+                               asp-controller="Usuario" asp-action="Index">
+                                <img class="menu__icon-img" src="~/images/usuarios.png" alt="">
+                                <span class="menu__label">Usuarios</span>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </nav>
+
+            <img class="sidebar__watermark" src="~/images/marca-agua.png" alt="">
+        </aside>
+
+        <!-- Contenido de cada módulo -->
+        <div class="content">
+
+            <header class="topbar">
+                <div class="topbar__left">
+                    <span class="topbar__usuario">@nombre</span>
+                    <a class="topbar__logout" href="@Url.Action("CambiarContrasena", "Account")">
+                        <span>Cambiar contraseña</span>
+                    </a>
+                </div>
+                <a class="topbar__logout" href="@Url.Action("Logout", "Account")">
+                    <img class="topbar__logout-icon" src="~/images/salir.png" alt="">
+                    <span>Cerrar Sesión</span>
+                </a>
+            </header>
+
+            <main class="stage">
+                @RenderBody()
+            </main>
+
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,289 @@
+/* =========================================================
+   FÚTBOL YA — Estilos del panel (sidebar + topbar + contenido)
+   ========================================================= */
+
+:root {
+    
+    --sidebar-bg: #2f373b;
+    --topbar-bg: #2f373b;
+    --item-bg: #37404a;
+    --item-hover: #46525c;
+    --item-active: #3f6b4a;
+    --item-active-hover: #497a55;
+    --divider: #2b2e30;
+    --text-light: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.65);
+
+    --font-display: 'Source Serif Pro', serif;
+    --font-body: 'Libre Baskerville', serif;
+
+    /* Achicamos el sidebar y el topbar para dejar más espacio a cada módulo */
+    --sidebar-width: 220px;
+    --topbar-height: 64px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Los navegadores no heredan la tipografía de la página en los controles de formulario
+   por defecto; sin este reset, inputs/selects/botones nativos caen a la fuente del sistema. */
+input, select, textarea, button {
+    font-family: inherit;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-size: 14px;
+    background: var(--bg-app);
+    font-family: var(--font-body);
+}
+
+/* ---------- Layout general ---------- */
+
+.app {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg-app);
+    overflow: hidden;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 var(--sidebar-width);
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--sidebar-bg);
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.35);
+    z-index: 2;
+}
+
+.sidebar__brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--topbar-height);
+    padding: 0 16px;
+    background: #23292c;
+    border-bottom: 3px solid var(--divider);
+}
+
+.sidebar__brand-logo {
+    width: 100px;
+    height: 150px;
+    object-fit: contain;
+}
+
+/* ---------- Menú ---------- */
+
+.sidebar__nav {
+    flex: 1;
+    padding: 12px 0 0;
+    position: relative;
+    z-index: 1;
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu__item {
+    border-bottom: 1px solid var(--divider);
+}
+
+.menu__button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: none;
+    background: var(--item-bg);
+    color: var(--text-light);
+    font-family: var(--font-display);
+    font-size: 17px;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.18s ease, padding-left 0.18s ease;
+}
+
+.menu__button:hover {
+    background: var(--item-hover);
+    padding-left: 24px;
+}
+
+.menu__button.is-active {
+    background: var(--item-active);
+}
+
+.menu__button.is-active:hover {
+    background: var(--item-active-hover);
+}
+
+/* Ícono de cada botón, servido desde wwwroot/images/icons/ */
+.menu__icon-img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.menu__label {
+    flex: 1;
+    white-space: nowrap;
+}
+
+/* ---------- Marca de agua ---------- */
+
+.sidebar__watermark {
+    position: absolute;
+    left: -10%;
+    bottom: 0;
+    width: 30;
+    max-width: 260px;
+    opacity: 0.16;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---------- Contenido ---------- */
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 100vh;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--topbar-height);
+    padding: 0 28px;
+    background: var(--topbar-bg);
+    border-bottom: 3px solid var(--divider);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.topbar__left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.topbar__usuario {
+    color: var(--text-light);
+    font-family: var(--font-body);
+    font-size: 15px;
+}
+
+.topbar__logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: var(--text-light);
+    font-family: var(--font-body);
+    font-size: 15px;
+    text-decoration: none;
+    transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.topbar__logout:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ff8a8a;
+}
+
+.topbar__logout-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* El escenario donde vive cada módulo (Canchas, Productos, etc.) */
+.stage {
+    flex: 1;
+    padding: 32px;
+    background-image: url('../images/cancha-fondo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow-y: auto;
+    /* Permite hacer scroll con la rueda del mouse sin mostrar la barra */
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* Edge / IE viejo */
+}
+
+/* Tarjeta blanca genérica: la va a usar cada módulo (Canchas, Home, etc.) */
+.panel {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 32px 40px;
+    max-width: 640px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.panel h1 {
+    font-family: var(--font-display);
+    color: #2f373b;
+    margin-bottom: 8px;
+}
+
+.panel p {
+    color: #555;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+    :root {
+        --sidebar-width: 190px;
+    }
+
+    .menu__button {
+        font-size: 15px;
+        padding: 12px 14px;
+    }
+}
+
+@media (max-width: 640px) {
+    .app {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .sidebar__watermark {
+        display: none;
+    }
+
+    .content {
+        min-height: auto;
+    }
+
+    .stage {
+        min-height: 320px;
+        padding: 16px;
+    }
+}

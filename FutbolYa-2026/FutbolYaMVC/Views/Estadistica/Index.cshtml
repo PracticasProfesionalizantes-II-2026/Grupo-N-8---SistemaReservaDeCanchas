@@ -1,0 +1,73 @@
+@model FutbolYaMVC.DTOs.EstadisticaIndexViewModel
+@{
+    ViewData["Title"] = "Estadísticas";
+}
+
+@* Productos y canchas llegan serializados desde el ViewModel para los chips de filtro;
+   wwwroot/js/estadisticas.js carga los reportes por AJAX y renderiza KPIs y barras.
+   Solo Administrador. *@
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/estadisticas.css" asp-append-version="true">
+}
+
+<div class="dash">
+    <div class="dash__header">
+        <h1 class="dash__title">Estadísticas</h1>
+
+        <div class="dash__periodo">
+            <div class="dash__periodo-botones">
+                <button type="button" class="dash__periodo-btn is-active" data-periodo="dia">Día</button>
+                <button type="button" class="dash__periodo-btn" data-periodo="semana">Semana</button>
+                <button type="button" class="dash__periodo-btn" data-periodo="mes">Mes</button>
+            </div>
+            <input type="date" id="inputFecha" class="dash__fecha">
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="dash__kpis">
+        <div class="kpi-card">
+            <span class="kpi-card__label">Reservas en el período</span>
+            <span class="kpi-card__valor" id="kpiReservas">-</span>
+        </div>
+        <div class="kpi-card kpi-card--verde">
+            <span class="kpi-card__label">Ingresos por ventas</span>
+            <span class="kpi-card__valor" id="kpiIngresos">-</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card__label">Productos vendidos</span>
+            <span class="kpi-card__valor" id="kpiCantidadVendida">-</span>
+        </div>
+    </div>
+
+    <div class="dash__paneles">
+
+        <!-- Panel Canchas -->
+        <div class="dash-panel">
+            <div class="dash-panel__header">
+                <h2>Reservas por cancha</h2>
+                <div class="dash-panel__filtro-chips" id="chipsCanchas"></div>
+            </div>
+            <div class="dash-panel__vacio" id="canchaVacio" hidden>No hay reservas en este período.</div>
+            <div class="barras" id="barrasCancha"></div>
+        </div>
+
+        <!-- Panel Productos -->
+        <div class="dash-panel">
+            <div class="dash-panel__header">
+                <h2 id="tituloPanelProducto">Ventas por producto</h2>
+                <div class="dash-panel__filtro-chips" id="chipsProductos"></div>
+            </div>
+            <div class="dash-panel__vacio" id="productoVacio" hidden>No hay ventas en este período.</div>
+            <div class="barras" id="barrasProducto"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const productosIniciales = @Html.Raw(Json.Serialize(Model.Productos));
+    const canchasIniciales = @Html.Raw(Json.Serialize(Model.Canchas));
+</script>
+<script src="~/js/estadisticas.js" asp-append-version="true"></script>

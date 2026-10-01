@@ -1,0 +1,250 @@
+@model FutbolYaMVC.DTOs.ReservaIndexViewModel
+@{
+    ViewData["Title"] = "Reservas";
+}
+
+@* Reservas, canchas, horarios y materiales llegan serializados desde el ViewModel;
+   wwwroot/js/reserva.js toma el control desde acá para el listado, el mini calendario
+   y los modales de alta/detalle/cancelación. *@
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/reserva.css" asp-append-version="true">
+}
+
+<div class="reservas-panel">
+    <h1 class="reservas-panel__title">Gestión de Reservas</h1>
+
+    <div class="reservas-toolbar">
+        <div class="reservas-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M21 21l-4.3-4.3" stroke-linecap="round" />
+            </svg>
+            <input type="text" id="inputBuscarReserva" placeholder="Buscar por N° (#12), cancha, DNI o teléfono...">
+        </div>
+        <select id="selectFiltroCancha" class="reservas-filter">
+            <option value="">Todas las canchas</option>
+            @foreach (var c in Model.Canchas)
+            {
+                <option value="@c.Cod_Cancha">@c.Nombre</option>
+            }
+        </select>
+        <select id="selectFiltroEstadoReserva" class="reservas-filter">
+            <option value="">Todos los estados</option>
+            <option value="Pendiente">Pendientes</option>
+            <option value="Confirmada">Realizadas</option>
+            <option value="Cancelada">Canceladas</option>
+        </select>
+        <input type="date" id="inputFiltroFecha" class="reservas-filter">
+    </div>
+
+    <div class="reservas-table-wrap">
+        <table class="reservas-table">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Cancha</th>
+                    <th>Hs</th>
+                    <th>Hora</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th class="reservas-table__th-acciones"></th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTablaReservas"></tbody>
+        </table>
+    </div>
+
+    <p class="reservas-hint">Hacé clic en una reserva para ver el detalle completo.</p>
+
+    <button type="button" class="btn-anadir" id="btnAbrirReserva">+ Agregar Reserva</button>
+</div>
+
+<!-- Modal Nueva Reserva -->
+<div class="modal-overlay" id="modalNuevaReserva" hidden>
+    <div class="modal-box modal-box--reserva">
+        <h2>Nueva Reserva</h2>
+
+        <div class="reserva-form-grid">
+
+            <!-- Columna 1: Cancha + Calendario -->
+            <div class="reserva-col reserva-col--calendario">
+                <div class="form-group">
+                    <label for="selectCanchaReserva">Cancha</label>
+                    <select id="selectCanchaReserva"></select>
+                </div>
+
+                <div class="mini-calendario">
+                    <div class="mini-calendario__header">
+                        <button type="button" id="btnMesAnterior" class="mini-calendario__nav" aria-label="Mes anterior">&lsaquo;</button>
+                        <span id="mesActualLabel" class="mini-calendario__mes"></span>
+                        <button type="button" id="btnMesSiguiente" class="mini-calendario__nav" aria-label="Mes siguiente">&rsaquo;</button>
+                    </div>
+                    <div class="mini-calendario__dias-semana">
+                        <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
+                    </div>
+                    <div class="mini-calendario__grid" id="calendarioGrid"></div>
+                </div>
+            </div>
+
+            <!-- Columna 2: Horarios -->
+            <div class="reserva-col reserva-col--horarios">
+                <div class="reserva-col__header">
+                    <label>Horarios <span class="reserva-horarios-ayuda">(elegí uno o más bloques consecutivos)</span></label>
+                    <div class="reserva-duracion">
+                        <span>Duración:</span>
+                        <strong id="duracionCalculada">0 hs</strong>
+                    </div>
+                </div>
+                <div class="lista-horarios" id="listaHorarios"></div>
+            </div>
+
+            <!-- Columna 3: Datos del cliente + Materiales -->
+            <div class="reserva-col reserva-col--datos">
+                <div class="form-group">
+                    <label for="campoDniReserva">Dni de la persona</label>
+                    <input type="text" id="campoDniReserva" maxlength="15" placeholder="Ej: 30123456">
+                </div>
+
+                <div class="form-group">
+                    <label for="campoTelefonoReserva">Teléfono</label>
+                    <input type="text" id="campoTelefonoReserva" maxlength="20" placeholder="Ej: 3401123456">
+                </div>
+
+                <div class="reserva-materiales">
+                    <label>Material</label>
+                    <div class="materiales-tabla-wrap">
+                        <table class="materiales-tabla">
+                            <thead>
+                                <tr>
+                                    <th>Material</th>
+                                    <th>Cantidad</th>
+                                    <th class="materiales-tabla__th-acciones"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpoTablaMaterialesReserva"></tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn-anadir-producto" id="btnAbrirAgregarMaterial">+ Añadir Material</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-error" id="reservaError"></div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-cancelar" id="btnCancelarReserva">Cancelar</button>
+            <button type="button" class="btn-guardar" id="btnConfirmarReserva">Reservar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Submodal Añadir Material -->
+<div class="modal-overlay" id="modalAgregarMaterial" hidden>
+    <div class="modal-box">
+        <h2>Añadir Material</h2>
+
+        <div class="form-group">
+            <label for="selectMaterialReserva">Material</label>
+            <select id="selectMaterialReserva"></select>
+        </div>
+
+        <div class="form-group">
+            <label for="campoCantidadMaterial">Cantidad</label>
+            <input type="number" id="campoCantidadMaterial" min="1" step="1" value="1">
+        </div>
+
+        <div class="modal-error" id="agregarMaterialError"></div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-cancelar" id="btnCancelarAgregarMaterial">Cancelar</button>
+            <button type="button" class="btn-guardar" id="btnConfirmarAgregarMaterial">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ver Detalle -->
+<div class="modal-overlay" id="modalDetalleReserva" hidden>
+    <div class="modal-box modal-box--reserva-detalle">
+        <h2 id="detalleReservaTitulo">Reserva</h2>
+
+        <div class="reserva-detalle-grid">
+            <div>
+                <span class="reserva-detalle-label">Cancha</span>
+                <span id="detalleCancha" class="reserva-detalle-valor"></span>
+            </div>
+            <div>
+                <span class="reserva-detalle-label">Estado</span>
+                <span id="detalleEstado" class="reserva-detalle-valor"></span>
+            </div>
+            <div>
+                <span class="reserva-detalle-label">Fecha de la reserva</span>
+                <span id="detalleFechaReserva" class="reserva-detalle-valor"></span>
+            </div>
+            <div>
+                <span class="reserva-detalle-label">Registrada el</span>
+                <span id="detalleFechaRegistro" class="reserva-detalle-valor"></span>
+            </div>
+            <div>
+                <span class="reserva-detalle-label">Horario</span>
+                <span id="detalleHorario" class="reserva-detalle-valor"></span>
+            </div>
+            <div>
+                <span class="reserva-detalle-label">Duración</span>
+                <span id="detalleDuracion" class="reserva-detalle-valor"></span>
+            </div>
+            <div>
+                <span class="reserva-detalle-label">DNI del cliente</span>
+                <span id="detalleDni" class="reserva-detalle-valor"></span>
+            </div>
+            <div>
+                <span class="reserva-detalle-label">Teléfono</span>
+                <span id="detalleTelefono" class="reserva-detalle-valor"></span>
+            </div>
+        </div>
+
+        <div class="reserva-materiales">
+            <label>Material deportivo</label>
+            <div class="materiales-tabla-wrap">
+                <table class="materiales-tabla">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoDetalleMateriales"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-actions modal-actions--fin">
+            <button type="button" class="btn-volver" id="btnCerrarDetalleReserva">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmar cancelación de reserva -->
+<div class="modal-overlay" id="modalBajaReserva" hidden>
+    <div class="modal-box">
+        <h2>Cancelar Reserva</h2>
+        <p class="modal-mensaje">¿Desea cancelar esta reserva? Se liberarán la cancha, el horario y el material asociado.</p>
+        <div class="modal-error" id="bajaReservaError"></div>
+        <div class="modal-actions">
+            <button type="button" class="btn-cancelar" id="btnCancelarBajaReserva">Volver</button>
+            <button type="button" class="btn-confirmar-baja" id="btnConfirmarBajaReserva">Cancelar Reserva</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toastReserva"></div>
+
+<script>
+    // Datos iniciales renderizados por el servidor
+    const reservasIniciales = @Html.Raw(Json.Serialize(Model.Reservas));
+    const canchasIniciales = @Html.Raw(Json.Serialize(Model.Canchas));
+    const horariosIniciales = @Html.Raw(Json.Serialize(Model.Horarios));
+    const materialesIniciales = @Html.Raw(Json.Serialize(Model.Materiales));
+</script>
+<script src="~/js/reserva.js" asp-append-version="true"></script>

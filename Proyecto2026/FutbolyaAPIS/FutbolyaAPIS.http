@@ -1,6 +1,0 @@
-@FutbolyaAPIS_HostAddress = http://localhost:5007
-
-GET {{FutbolyaAPIS_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
