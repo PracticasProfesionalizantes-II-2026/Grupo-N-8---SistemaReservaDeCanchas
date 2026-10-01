@@ -14,3 +14,7 @@
 [Apis - Gestion de Reserva Futbol YAV2](https://docs.google.com/document/d/14La5cizqNcgoDlM5hH8vtNPT_XRfzQ_tYlTLNZfAHtg/edit?usp=sharing)
 
 [Casos de usoV2](https://docs.google.com/document/d/1Jr80ipryTLv9fvzDf_cIxizHUxM-Am9iR2mQfZBlZHw/edit?usp=sharing)
+
+//CUANDO SE LEVANTA EL SISTEMA, Y SE EJECUTA EL DOTNET RUN EN LA API EL SISTEMA HACE UN CHEKEO RAPIDO EN LA BASE DE DATOS, SI VE QUE LA TABLA USUARIO ESTA VACIA INSERTA UN USUARIO ADMIN POR DEFECTO, CUYA CREDENCIALES SON:
+//correo: admin@futbolya.com
+//contraseña: Admin1234
