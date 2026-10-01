@@ -9,6 +9,8 @@
 
 
 2026:
-[Documentación del proyectoV2](https://docs.google.com/document/d/14PbJCD9e18EdYHACEBFLRVqnlWQvJPIPNy4jGATCMIM/edit?usp=sharing)
+[Documentación del proyectoV2](https://docs.google.com/document/d/1UqS4IM-bTSV4vCozvVlxupHrnXSFEy-khedwWxmhQho/edit?usp=sharing)
 
-[Apis - Gestion de Reserva Futbol YA](https://docs.google.com/document/d/1rLEIVHViZpNzWSVKFAQC3gooSQ-DkB1DiTJg6w0mgtI/edit?usp=sharing)
+[Apis - Gestion de Reserva Futbol YAV2](https://docs.google.com/document/d/14La5cizqNcgoDlM5hH8vtNPT_XRfzQ_tYlTLNZfAHtg/edit?usp=sharing)
+
+[Casos de usoV2](https://docs.google.com/document/d/1Jr80ipryTLv9fvzDf_cIxizHUxM-Am9iR2mQfZBlZHw/edit?usp=sharing)
